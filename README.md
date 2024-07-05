@@ -76,7 +76,7 @@ Currently, the sample test cases cover:
 
 1. Install Python >= 3.12: [Python.org -> Downloads](https://www.python.org/downloads/)
 2. Restore all other Python dependencies within: [requirements.txt](requirements.txt)
-   1. ``pip install -r requirements.txt`` 
+   1. `pip install -r requirements.txt`
 3. When running Python virtual environment you might need to set your Python language server to the correct `python.exe`, this should match your Python Virtual environment.
     1. For additional information on **IntelliJ Python** see [this link](https://www.jetbrains.com/help/idea/configuring-python-sdk.html#b631bcd6_38).
     2. For **Visual Studio code**, ensure that the following line is added to your `settings.json` file example:
