@@ -83,9 +83,9 @@ Currently, the sample test cases cover:
         1. `"robot.language-server.python": "C:\\python312_virtual_env\\Scripts\\python.exe"`
 4. Run: `rfbrowser init` to initialize your browser dependency libraries.
 
-### Special note on Zscaler on Windows environments
+### Side note
 
-_If you encounter any errors when trying to install packages, open **Zscaler** and turn it off._
+- If you do not yet have any preference in regard to which IDE and Plugin combination to use, I would strongly recommend: [IntelliJ IDEA](https://www.jetbrains.com/idea/) or [PyCharm](https://www.jetbrains.com/pycharm/) from JetBrains as an **IDE** and the [Hyper RobotFramework Support](https://plugins.jetbrains.com/plugin/16382-hyper-robotframework-support) **plugin** for Robot Framework development.
 
 ## Customization Options
 This template is designed to be flexible and easily extendable. You can:
