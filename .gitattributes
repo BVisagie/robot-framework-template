@@ -1,0 +1,3 @@
+# Due to file system differences between Windows and Linux we need to force the Linux format.
+# For documentation, please see: https://git-scm.com/docs/gitattributes
+* text eol=lf

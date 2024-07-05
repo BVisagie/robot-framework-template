@@ -1,0 +1,34 @@
+# IDE's
+.idea
+.vscode
+
+# Reports and logs
+playwright-log.txt
+report.html
+log.html
+log
+*.old
+*.xml
+reports/
+testresults/
+pip-log.txt
+pip-delete-this-directory.txt
+coverage.xml
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+*.iml
+python
+__pycache__
+.bash_history
+.cache/
+.pytest_cache/
+.run
+browser
