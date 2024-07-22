@@ -6,8 +6,11 @@ Welcome to the Robot Framework Template Repository! This repository provides a s
 
 - [Directory Structure](#directory-structure)
 - [Sample Test Cases](#sample-test-cases)
-- [CI/CD Integration](#cicd-integration)
 - [Getting Started](#getting-started)
+  - [Dependencies](#dependencies)
+  - [Installing for local development](#installing-for-local-development)
+  - [Configure the project to use a Python Virtual Environment](#configure-the-project-to-use-a-python-virtual-environment)
+- [Notes and recommendations](#notes-and-recommendations)
 - [Customization Options](#customization-options)
 - [A word on Coding Style](#a-word-on-coding-style)
 - [Authors](#authors)
@@ -63,9 +66,6 @@ Currently, the sample test cases cover:
     - This may be found in sections related to: `db_tests`
     - **Please note** that the database tests are not meant to be functional as including real database details and running real queries are beyond the scope of this template repository at this time.
 
-## CI/CD Integration
-### :building_construction: Currently under construction. :construction:
-
 ## Getting Started
 ### Dependencies
 * Python >= `3.12`
@@ -77,6 +77,9 @@ Currently, the sample test cases cover:
 
 1. Install Python >= `3.12`: [Python.org -> Downloads](https://www.python.org/downloads/)
 2. Install Node.js >= `22`: [Node.js -> Downloads](https://nodejs.org/en) (required to allow UI automation using [Playwright](https://playwright.dev/))
+   1. If you are running a Python Virtual Environment in Linux, you will need something like: [Node.js virtual environment](https://pypi.org/project/nodeenv/)
+      1. `pip install nodeenv`
+      2. `npm install -g npm`
 3. Restore all other Python dependencies within: [requirements.txt](requirements.txt)
    1. `pip install -r requirements.txt`
 4. When running Python virtual environment you might need to set your Python language server to the correct `python.exe`, this should match your Python Virtual environment.
@@ -85,9 +88,9 @@ Currently, the sample test cases cover:
         1. `"robot.language-server.python": "C:\\python312_virtual_env\\Scripts\\python.exe"`
 5. Run: `rfbrowser init` to initialize your browser dependency libraries.
 
-### Setting Up the Project using a Python Virtual Environment (venv) in Linux
+### Configure the project to use a Python Virtual Environment
 
-Using a Python virtual environment is recommended on Linux. The easiest way to set this up, is to place the virtual environment inside the project directory; follow these steps:
+Using a Python virtual environment (venv) is **recommended on Linux**. The simplest way to set this up, is to place the virtual environment inside the project directory, following these steps:
 
 1. **Navigate to the project directory**:
     ```sh
@@ -120,9 +123,10 @@ Using a Python virtual environment is recommended on Linux. The easiest way to s
     deactivate
     ```
 
-### Side note
+## Notes and recommendations
 
 - If you do not yet have any preference in regard to which IDE and Plugin combination to use, I would strongly recommend: [IntelliJ IDEA](https://www.jetbrains.com/idea/) or [PyCharm](https://www.jetbrains.com/pycharm/) from JetBrains as an **IDE** and the [Hyper RobotFramework Support](https://plugins.jetbrains.com/plugin/16382-hyper-robotframework-support) **plugin** for Robot Framework development.
+- Other utilities worth considering: [RoboTidy](https://github.com/MarketSquare/robotframework-tidy) is a tool for autoformatting Robot Framework code, [RoboCop](https://github.com/MarketSquare/robotframework-robocop) is a tool for static code analysis of Robot Framework language 
 
 ## Customization Options
 This template is designed to be flexible and easily extendable. You can:
@@ -132,7 +136,7 @@ This template is designed to be flexible and easily extendable. You can:
 - Update the requirements.txt file to include any additional dependencies.
 
 ## A word on Coding Style
-- Regarding Tabs or Spaces: **_two spaces are the preferred indentation method_** as set out by Python standards. If you are used to using TAB, just set TABBING to go two spaces in your IDE.
+- Regarding Tabs or Spaces: **_four spaces are the preferred indentation method_** as set out by Python PEP 8 standards. If you are used to using TAB, just set TABBING to go four spaces in your IDE.
     - Official Python style guides regarding [Tabs or Spaces](https://peps.python.org/pep-0008/#tabs-or-spaces).
 
 ## Authors
