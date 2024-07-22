@@ -1,9 +1,9 @@
 *** Settings ***
-Documentation  Some static data regarding the API test website: jsonplaceholder.typicode.com
+Documentation       Some static data regarding the API test website: jsonplaceholder.typicode.com
+
 
 *** Variables ***
-
-${project_json_base_uri}  https://jsonplaceholder.typicode.com
-${project_json_posts_uri}  /posts
-${project_json_comments_uri}  /comments
-${project_json_albums_uri}  /albums
+${PROJECT_JSON_BASE_URI}        https://jsonplaceholder.typicode.com
+${PROJECT_JSON_POSTS_URI}       /posts
+${PROJECT_JSON_COMMENTS_URI}    /comments
+${PROJECT_JSON_ALBUMS_URI}      /albums
