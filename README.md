@@ -68,20 +68,57 @@ Currently, the sample test cases cover:
 
 ## Getting Started
 ### Dependencies
-* Python >= 3.12
-* Robot Framework >= 7.0.1
+* Python >= `3.12`
+* Node.js >= `22`
+* Robot Framework >= `7.0.1`
 * Please see `requirements.txt` for all other Python and Robot Framework dependencies
 
 ### Installing for local development
 
-1. Install Python >= 3.12: [Python.org -> Downloads](https://www.python.org/downloads/)
-2. Restore all other Python dependencies within: [requirements.txt](requirements.txt)
+1. Install Python >= `3.12`: [Python.org -> Downloads](https://www.python.org/downloads/)
+2. Install Node.js >= `22`: [Node.js -> Downloads](https://nodejs.org/en) (required to allow UI automation using [Playwright](https://playwright.dev/))
+3. Restore all other Python dependencies within: [requirements.txt](requirements.txt)
    1. `pip install -r requirements.txt`
-3. When running Python virtual environment you might need to set your Python language server to the correct `python.exe`, this should match your Python Virtual environment.
+4. When running Python virtual environment you might need to set your Python language server to the correct `python.exe`, this should match your Python Virtual environment.
     1. For additional information on **IntelliJ Python** see [this link](https://www.jetbrains.com/help/idea/configuring-python-sdk.html#b631bcd6_38).
     2. For **Visual Studio code**, ensure that the following line is added to your `settings.json` file example:
         1. `"robot.language-server.python": "C:\\python312_virtual_env\\Scripts\\python.exe"`
-4. Run: `rfbrowser init` to initialize your browser dependency libraries.
+5. Run: `rfbrowser init` to initialize your browser dependency libraries.
+
+### Setting Up the Project using a Python Virtual Environment (venv) in Linux
+
+Using a Python virtual environment is recommended on Linux. The easiest way to set this up, is to place the virtual environment inside the project directory; follow these steps:
+
+1. **Navigate to the project directory**:
+    ```sh
+    cd /path/to/your/project
+    ```
+
+2. **Create a virtual environment**:
+    ```sh
+    python3 -m venv venv
+    ```
+
+3. **Activate the virtual environment**:
+    ```sh
+    source venv/bin/activate
+    ```
+
+4. **Install the required dependencies**:
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+5. **Initialize browser dependencies**:
+    ```sh
+    rfbrowser init
+    ```
+
+6. **Deactivating the virtual environment**:
+   When you are done working on the project, you can deactivate the virtual environment by running:
+    ```sh
+    deactivate
+    ```
 
 ### Side note
 

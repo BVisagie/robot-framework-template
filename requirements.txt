@@ -3,4 +3,4 @@ robotframework-browser>=18.5.1  # Robot Framework Browser library powered by Pla
 robotframework-requests>=0.9.7  # RequestsLibrary is a Robot Framework library aimed to provide HTTP api testing functionalities.
 robotframework-databaselibrary>=1.4.4  # The Database Library for Robot Framework allows you to query a database and verify the results.
 oracledb>=2.2.1  # python-oracledb is a Python programming language extension module allowing Python programs to connect to Oracle Database. It is the renamed, new major release of the popular cx_Oracle driver.
-psycopg2>=2.9.9  # Psycopg is the most popular PostgreSQL database adapter for the Python programming language. # Please note: unfortunately as of March 2024 it does not seem like Robot Framework (7) supports Psycopg 3 yet.
+psycopg2-binary>=2.9.9  # Psycopg is the most popular PostgreSQL database adapter for the Python programming language. # Please note: unfortunately as of March 2024 it does not seem like Robot Framework (7) supports Psycopg 3 yet.
