@@ -63,7 +63,7 @@ Currently, the sample test cases cover:
 - Basic API testing using the RequestsLibrary for Robot Framework
   - This may be found in sections related to: `project_json_placeholder`
 - Basic Database testing using the DatabaseLibrary for Robot Framework
-    - This may be found in sections related to: `db_tests`
+    - This may be found in sections related to: `project_database`
     - **Please note** that the database tests are not meant to be functional as including real database details and running real queries are beyond the scope of this template repository at this time.
 
 ## Getting Started
