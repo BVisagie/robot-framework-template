@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation       A suite of example tests to do some basic illustrate validations against the target system,
+Documentation       A suite of example tests to do some basic illustrative validations against the target system,
 ...                 hosted at: https://jsonplaceholder.typicode.com/
 
 Resource            ../../../resources/project_json_placeholder/posts_endpoint.resource
