@@ -137,6 +137,7 @@ This template is designed to be flexible and easily extendable. You can:
 
 ## A word on Coding Style
 - Regarding Tabs or Spaces: **_four spaces are the preferred indentation method_** as set out by Python PEP 8 standards. If you are used to using TAB, just set TABBING to go four spaces in your IDE.
+    - [Robot Framework User Guide - Space Separated Format](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#space-separated-format)
     - Official Python style guides regarding [Tabs or Spaces](https://peps.python.org/pep-0008/#tabs-or-spaces).
 
 ## Authors
