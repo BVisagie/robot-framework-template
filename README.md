@@ -6,13 +6,14 @@ Welcome to the Robot Framework Template Repository! This repository provides a s
 
 - [Directory Structure](#directory-structure)
 - [Sample Test Cases](#sample-test-cases)
+- [CI/CD Integration](#cicd-integration)
 - [Getting Started](#getting-started)
   - [Dependencies](#dependencies)
-  - [Installing for local development](#installing-for-local-development)
-  - [Configure the project to use a Python Virtual Environment](#configure-the-project-to-use-a-python-virtual-environment)
-- [Notes and recommendations](#notes-and-recommendations)
+  - [Installing for Local Development](#installing-for-local-development)
+  - [Configure the Project to Use a Python Virtual Environment](#configure-the-project-to-use-a-python-virtual-environment)
+  - [Special Note on Zscaler on Windows Environments](#special-note-on-zscaler-on-windows-environments)
 - [Customization Options](#customization-options)
-- [A word on Coding Style](#a-word-on-coding-style)
+- [A Word on Coding Style](#a-word-on-coding-style)
 - [Authors](#authors)
 
 ## Directory Structure
