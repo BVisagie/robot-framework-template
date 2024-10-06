@@ -146,12 +146,6 @@ virtual environment inside the project directory, following these steps:
     deactivate
     ```
 
-9. **(Optional) Deactivating the virtual environment**:
-   When you are done working on the project, you can deactivate the virtual environment by running:
-    ```sh
-    deactivate
-    ```
-
 ## Notes and recommendations
 
 - If you do not yet have any preference in regard to which IDE and Plugin combination to use, I would strongly
