@@ -134,7 +134,6 @@ virtual environment inside the project directory, following these steps:
     - Install curl: `sudo apt-get install curl`
     - Follow the steps published by Node.js [here](https://nodejs.org/en/download/package-manager).
 
-
 7. **(Optional - only needed for UI testing) Install dependencies to run browsers**:
     ```sh
     sudo npx playwright install-deps
