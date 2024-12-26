@@ -18,12 +18,12 @@ Open connection to target database
 
     TRY
         DatabaseLibrary.connect to database
-        ...    dbapiModuleName=${target_database_information_dictionary.dbApiModuleName}
-        ...    dbName=${target_database_information_dictionary.dbServiceName}
-        ...    dbUsername=${target_database_information_dictionary.dbUser}
-        ...    dbPassword=${target_database_information_dictionary.dbPassword}
-        ...    dbHost=${target_database_information_dictionary.dbHost}
-        ...    dbPort=${target_database_information_dictionary.dbPort}
+        ...    db_module=${target_database_information_dictionary.dbApiModuleName}
+        ...    db_name=${target_database_information_dictionary.dbServiceName}
+        ...    db_user=${target_database_information_dictionary.dbUser}
+        ...    db_password=${target_database_information_dictionary.dbPassword}
+        ...    db_host=${target_database_information_dictionary.dbHost}
+        ...    db_port=${target_database_information_dictionary.dbPort}
     EXCEPT    DatabaseError: ORA-12545: Connect failed because target host or object does not exist    AS    ${msg}
         Fail    Not connected to db. Perhaps your VPN connection has disconnected?    ${msg}
     END
