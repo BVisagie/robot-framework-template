@@ -109,6 +109,7 @@ robot --outputdir output tests/project_wikipedia/ui_tests
 
 - Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md)
 - Windows: [docs/quickstart-windows.md](docs/quickstart-windows.md)
+- Docker: [docs/quickstart-docker.md](docs/quickstart-docker.md)
 
 Optional developer tooling:
 
@@ -120,10 +121,7 @@ pre-commit install
 
 ### Configure the project to use a Python Virtual Environment
 
-See the platform-specific Quickstart Guides for creating, activating, and using a virtual environment:
-
-- Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md)
-- Windows: [docs/quickstart-windows.md](docs/quickstart-windows.md)
+See the platform-specific Quickstart Guides for creating, activating, and using a virtual environment.
 
 ## Notes and recommendations
 
