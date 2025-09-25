@@ -3,6 +3,8 @@
 Welcome to the Robot Framework Template Repository! This repository provides a structured starting point for your
 automated testing projects using Robot Framework and Python.
 
+Official repository: [github.com/BVisagie/robot-framework-template](https://github.com/BVisagie/robot-framework-template)
+
 ## Table of Contents
 
 - [Directory Structure](#directory-structure)
@@ -10,6 +12,7 @@ automated testing projects using Robot Framework and Python.
 - [Getting Started](#getting-started)
     - [Dependencies](#dependencies)
     - [Installing for local development](#installing-for-local-development)
+    - [Quickstart Guides](#quickstart-guides)
     - [Configure the project to use a Python Virtual Environment](#configure-the-project-to-use-a-python-virtual-environment)
 - [Notes and recommendations](#notes-and-recommendations)
 - [Customization Options](#customization-options)
@@ -76,85 +79,63 @@ Currently, the sample test cases cover:
 
 ### Dependencies
 
-* Python >= `3.12`
+* Python >= `3.13`
 * Node.js >= `22`
-* Robot Framework >= `7.0.1`
+* Robot Framework >= `7.1.1`
 * Please see `requirements.txt` for all other Python and Robot Framework dependencies
 
 ### Installing for local development
 
-1. Install Python >= `3.12`: [Python.org -> Downloads](https://www.python.org/downloads/)
-2. Install Node.js >= `22`: [Node.js -> Downloads](https://nodejs.org/en) (required to allow UI automation
-   using [Playwright](https://playwright.dev/))
-    1. If you are running a Python Virtual Environment in Linux, you will need something
-       like: [Node.js virtual environment](https://pypi.org/project/nodeenv/)
-        1. `pip install nodeenv`
-        2. `npm install -g npm`
-3. Restore all other Python dependencies within: [requirements.txt](requirements.txt)
-    1. `pip install -r requirements.txt`
-4. When running Python virtual environment you might need to set your Python language server to the correct
-   `python.exe`, this should match your Python Virtual environment.
-    1. For additional information on **IntelliJ Python**
-       see [this link](https://www.jetbrains.com/help/idea/configuring-python-sdk.html#b631bcd6_38).
-    2. For **Visual Studio code**, ensure that the following line is added to your `settings.json` file example:
-        1. `"robot.language-server.python": "C:\\python312_virtual_env\\Scripts\\python.exe"`
-5. Run: `rfbrowser init` to initialize your browser dependency libraries.
+For step-by-step setup on your OS (Python 3.13+, Node 22+, venv, Playwright deps, and Browser init), follow the Quickstart Guides:
+
+- Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md)
+- Windows: [docs/quickstart-windows.md](docs/quickstart-windows.md)
+
+### Quickstart commands
+
+```sh
+# Lint and format checks (Robocop v6+)
+robocop check .
+robocop format .
+
+# Run API tests
+robot --outputdir output tests/project_json_placeholder/api_tests
+
+# Run UI tests (headless by default)
+robot --outputdir output tests/project_wikipedia/ui_tests
+```
+
+### Quickstart Guides
+
+- Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md)
+- Windows: [docs/quickstart-windows.md](docs/quickstart-windows.md)
+
+Optional developer tooling:
+
+```sh
+# Install dev tools (pre-commit, Robocop v6+, Ruff)
+pip install -r requirements-dev.txt
+pre-commit install
+```
 
 ### Configure the project to use a Python Virtual Environment
 
-Using a Python virtual environment (venv) is **recommended on Linux**. The simplest way to set this up, is to place the
-virtual environment inside the project directory, following these steps:
+See the platform-specific Quickstart Guides for creating, activating, and using a virtual environment:
 
-1. **Navigate to the project directory**:
-    ```sh
-    cd /path/to/your/project
-    ```
-
-2. **Create a virtual environment**:
-    ```sh
-    python3 -m venv venv
-    ```
-
-3. **Activate the virtual environment**:
-    ```sh
-    source venv/bin/activate
-    ```
-
-4. **Update pip**:
-    ```sh
-    pip install --upgrade pip
-    ```
-
-5. **Install the required dependencies**:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-6. **(Optional - only needed for UI testing) Setup Node.js**:
-    - Install curl: `sudo apt-get install curl`
-    - Follow the steps published by Node.js [here](https://nodejs.org/en/download/package-manager).
-
-7. **(Optional - only needed for UI testing) Install dependencies to run browsers**:
-    ```sh
-    sudo npx playwright install-deps
-    ```
-
-8. **(Optional) Deactivating the virtual environment**:
-   When you are done working on the project, you can deactivate the virtual environment by running:
-    ```sh
-    deactivate
-    ```
+- Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md)
+- Windows: [docs/quickstart-windows.md](docs/quickstart-windows.md)
 
 ## Notes and recommendations
 
-- If you do not yet have any preference in regard to which IDE and Plugin combination to use, I would strongly
-  recommend: [IntelliJ IDEA](https://www.jetbrains.com/idea/) or [PyCharm](https://www.jetbrains.com/pycharm/) from
-  JetBrains as an **IDE** and
-  the [Hyper RobotFramework Support](https://plugins.jetbrains.com/plugin/16382-hyper-robotframework-support) **plugin**
-  for Robot Framework development.
-- Other utilities worth considering: [RoboTidy](https://github.com/MarketSquare/robotframework-tidy) is a tool for
-  autoformatting Robot Framework code, [RoboCop](https://github.com/MarketSquare/robotframework-robocop) is a tool for
-  static code analysis of Robot Framework language
+- IDE and plugins
+  - Primary recommendation: [RobotCode](https://robotcode.io/) — multi‑IDE language server, debugger, analyzer, REPL, refactoring, profiles via `robot.toml`.
+  - Alternative: [Hyper RobotFramework Support](https://plugins.jetbrains.com/plugin/16382-hyper-robotframework-support).
+  - Editors: [VS Code](https://code.visualstudio.com/) or [JetBrains IDEs](https://www.jetbrains.com/pycharm/) both work well.
+  - Tip: enable Robotidy/Robocop integration or use pre‑commit to keep quality consistent.
+- Linting/formatting
+  - [Robotidy](https://github.com/MarketSquare/robotframework-tidy) for formatting.
+  - [Robocop](https://github.com/MarketSquare/robotframework-robocop) for static analysis.
+  - This template includes basic configs and optional pre‑commit hooks.
 
 ## Customization Options
 
@@ -164,12 +145,26 @@ This template is designed to be flexible and easily extendable. You can:
 - Modify the GitHub Actions workflow to include additional steps or custom scripts.
 - Update the requirements.txt file to include any additional dependencies.
 
+### Environment variables
+- `HEADLESS_BROWSER` (true/false) to control headless mode (defaults to true).
+- `WIKIPEDIA_BASE_URL` to override the default Wikipedia base URL.
+- Database-related variables (examples only): `DB_HOST`, `DB_PORT`, `DB_SERVICE_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_API_MODULE`.
+
 ## A word on Coding Style
 
 - Regarding Tabs or Spaces: **_four spaces are the preferred indentation method_** as set out by Python PEP 8 standards.
   If you are used to using TAB, just set TABBING to go four spaces in your IDE.
     - [Robot Framework User Guide - Space Separated Format](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#space-separated-format)
     - Official Python style guides regarding [Tabs or Spaces](https://peps.python.org/pep-0008/#tabs-or-spaces).
+
+### RF-native first
+- Prefer native Robot Framework syntax, libraries, and patterns. Use Python only when a clear gap exists.
+- Examples here keep Python to a minimum (e.g., a single helper function) and showcase RF v7+ features.
+
+### Database examples (non-functional by default)
+- DB examples are placeholders, tagged to avoid accidental execution.
+- You can optionally provide DB settings through environment variables and build a `&{db}` dictionary using the provided keyword.
+- See the keywords in `resources/project_database/db_actions_and_verifications.resource` for details.
 
 ## Authors
 
