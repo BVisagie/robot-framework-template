@@ -19,4 +19,4 @@ Documentation       An area to host all project specific static database data.
 ...                             dbUser=examplePostgreSQLUser
 ...                             dbPassword=examplePostgreSQLPassword
 ...                             dbServiceId=examplePostgreSQLServiceId
-...                             dbApiModuleName=psycopg2
+...                             dbApiModuleName=psycopg

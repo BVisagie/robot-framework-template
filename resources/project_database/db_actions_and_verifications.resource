@@ -9,6 +9,16 @@ Resource            ../../data/project_database/regex_templates_for_queries.reso
 Library             ../common_python/common_functions.py
 
 
+*** Variables ***
+# Environment-derived overrides (optional). If set in the environment, these can be used to compose DB dictionaries.
+${ENV_DB_HOST}=             %{DB_HOST}
+${ENV_DB_PORT}=             %{DB_PORT}
+${ENV_DB_SERVICE_NAME}=     %{DB_SERVICE_NAME}
+${ENV_DB_USER}=             %{DB_USER}
+${ENV_DB_PASSWORD}=         %{DB_PASSWORD}
+${ENV_DB_API_MODULE}=       %{DB_API_MODULE}
+
+
 *** Keywords ***
 Example Oracle database test
     [Documentation]    Select query focused test example (Oracle)
@@ -93,6 +103,34 @@ Modify the given query replacing an item placeholder with the actual item
 
     RETURN    ${result}
 
+Build database info dictionary from environment
+    [Documentation]    Build a database info dictionary using environment variables if present; falls back to provided defaults.
+    [Arguments]    &{defaults}
+
+    # Use defaults if ENV vars are empty
+    ${dbHost}=    Set Variable If    '${ENV_DB_HOST}'!=''    ${ENV_DB_HOST}    ${defaults.dbHost}
+    ${dbPort}=    Set Variable If    '${ENV_DB_PORT}'!=''    ${ENV_DB_PORT}    ${defaults.dbPort}
+    ${dbServiceName}=    Set Variable If
+    ...    '${ENV_DB_SERVICE_NAME}'!=''
+    ...    ${ENV_DB_SERVICE_NAME}
+    ...    ${defaults.dbServiceName}
+    ${dbUser}=    Set Variable If    '${ENV_DB_USER}'!=''    ${ENV_DB_USER}    ${defaults.dbUser}
+    ${dbPassword}=    Set Variable If    '${ENV_DB_PASSWORD}'!=''    ${ENV_DB_PASSWORD}    ${defaults.dbPassword}
+    ${dbApiModuleName}=    Set Variable If
+    ...    '${ENV_DB_API_MODULE}'!=''
+    ...    ${ENV_DB_API_MODULE}
+    ...    ${defaults.dbApiModuleName}
+
+    &{result}=    Create Dictionary
+    ...    dbHost=${dbHost}
+    ...    dbPort=${dbPort}
+    ...    dbServiceName=${dbServiceName}
+    ...    dbUser=${dbUser}
+    ...    dbPassword=${dbPassword}
+    ...    dbApiModuleName=${dbApiModuleName}
+
+    RETURN    &{result}
+
 Modify the given query replacing an updated date placeholder with the actual updated date
     [Documentation]    Within the given query string find :VAR_UPDATED_DATE and replace with the correct updated date
     ...    value, example 2024-04-12 14:14. Warning: currently this keyword does not support comments left in the query,
@@ -120,3 +158,19 @@ Modify the given query adding a target boolean
     ...    replace_with_value=${target_bool}
 
     RETURN    ${result}
+
+Demonstrate building database info dictionary from environment (no connection)
+    [Documentation]    Compose a DB info dictionary using environment variables (if set), falling back to provided
+    ...    defaults. This keyword does not open a database connection.
+    [Arguments]    &{defaults}=&{PROJECT_POSTGRESQL_DB}
+
+    &{db}=    Build database info dictionary from environment    &{defaults}
+
+    Dictionary Should Contain Key    &{db}    dbHost
+    Dictionary Should Contain Key    &{db}    dbPort
+    Dictionary Should Contain Key    &{db}    dbServiceName
+    Dictionary Should Contain Key    &{db}    dbUser
+    Dictionary Should Contain Key    &{db}    dbApiModuleName
+
+    Log
+    ...    DB config (redacted): host=${db.dbHost} port=${db.dbPort} db=${db.dbServiceName} user=${db.dbUser} module=${db.dbApiModuleName}

@@ -12,7 +12,7 @@ Open connection to target database
     [Documentation]    TODO
     [Arguments]    &{target_database_information_dictionary}
 
-    Is Dictionary Empty    &{target_database_information_dictionary}
+    Should Not Be Empty    &{target_database_information_dictionary}
 
     Log    Now attempting to connect to target test database: ${target_database_information_dictionary.dbHost}
 
@@ -24,8 +24,10 @@ Open connection to target database
         ...    db_password=${target_database_information_dictionary.dbPassword}
         ...    db_host=${target_database_information_dictionary.dbHost}
         ...    db_port=${target_database_information_dictionary.dbPort}
-    EXCEPT    DatabaseError: ORA-12545: Connect failed because target host or object does not exist    AS    ${msg}
-        Fail    Not connected to db. Perhaps your VPN connection has disconnected?    ${msg}
+    EXCEPT    AS    ${msg}
+        Fail
+        ...    Failed to connect to database at host=${target_database_information_dictionary.dbHost} port=${target_database_information_dictionary.dbPort}.
+        ...    ${msg}
     END
 
 Close connection from the current database
@@ -89,7 +91,7 @@ Execute SQL Statement
     ...    ignore_case=True
     ...    msg=This SQL statement does not seem to be a statement! Perhaps use: 'Execute sql query'.
 
-    Open connection to target database    ${target_database_information_dictionary}
+    Open connection to target database    &{target_database_information_dictionary}
 
     DatabaseLibrary.Set Auto Commit    autoCommit=${True}
     DatabaseLibrary.Execute Sql String
@@ -97,6 +99,30 @@ Execute SQL Statement
     ...    omitTrailingSemicolon=${omitTrailingSemicolon} # See documentation regarding omitTrailingSemicolon.
 
     Close connection from the current database
+
+Open PostgreSQL connection using custom params (psycopg3)
+    [Documentation]    Connect using psycopg3 with custom parameters (e.g., sslmode). Useful when you need additional
+    ...    driver-level options. The db dictionary should include: dbApiModuleName=psycopg, dbServiceName,
+    ...    dbUser, dbPassword, dbHost, dbPort. Default sslmode is 'prefer'.
+    [Arguments]    &{target_database_information_dictionary}
+    ...    ${sslmode}=prefer
+
+    Should Not Be Empty    &{target_database_information_dictionary}
+
+    TRY
+        DatabaseLibrary.Connect To Database Using Custom Params
+        ...    ${target_database_information_dictionary.dbApiModuleName}
+        ...    dbname='${target_database_information_dictionary.dbServiceName}'
+        ...    user='${target_database_information_dictionary.dbUser}'
+        ...    password='${target_database_information_dictionary.dbPassword}'
+        ...    host='${target_database_information_dictionary.dbHost}'
+        ...    port=${target_database_information_dictionary.dbPort}
+        ...    sslmode='${sslmode}'
+    EXCEPT    AS    ${msg}
+        Fail
+        ...    Failed to connect (custom params) to ${target_database_information_dictionary.dbHost}:${target_database_information_dictionary.dbPort}.
+        ...    ${msg}
+    END
 
 Modify a string replacing desired value based on the provided regex pattern
     [Documentation]    Generic string function, within the given string find a value based on given regex and replace

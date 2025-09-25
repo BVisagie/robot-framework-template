@@ -18,7 +18,7 @@ Call and validate the posts endpoint using HTTP GET
 
     ${response}=    RequestsLibrary.GET    url=${target_endpoint}    expected_status=200
     ${response_as_json}=    Set Variable    ${response.json()}
-    Should Not Be Empty    Empty    ${response_as_json}
+    Should Not Be Empty    ${response_as_json}
 
 Call and validate the comments endpoint using random postId using HTTP GET
     [Documentation]    Does an HTTP GET request with a random postId parameter in the URI, ensuring 200 OK is received
@@ -37,7 +37,33 @@ Call and validate the comments endpoint using random postId using HTTP GET
     ...    expected_status=200
     ${response_as_json}=    Set Variable    ${response.json()}
     Log    ${response_as_json}    # Logging this to file just as an example.
+    Should Not Be Empty    ${response_as_json}
+    Validate JSON Response Is List    ${response_as_json}
+    Validate Each Item Has Required Keys within the Response    ${response_as_json}
+
+Create JSONPlaceholder session
+    [Documentation]    Create a RequestsLibrary session using the base URI for jsonplaceholder.
+
+    Create Session    alias=jsonplaceholder    url=${PROJECT_JSON_BASE_URI}
+
+Call and validate the posts endpoint using session
+    [Documentation]    Use a pre-created session to GET the posts endpoint and validate.
+
+    ${response}=    Get On Session    alias=jsonplaceholder    url=${PROJECT_JSON_POSTS_URI}    expected_status=200
+    ${response_as_json}=    Set Variable    ${response.json()}
     Should Not Be Empty    Empty    ${response_as_json}
+
+Call and validate the comments endpoint using random postId via session
+    [Documentation]    Use a pre-created session to GET the comments endpoint with a random postId and validate.
+
+    ${random_but_valid_post_id}=    get_random_int    min_value=1    max_value=100
+    &{random_post_id_dictionary}=    Create Dictionary    postId=${random_but_valid_post_id}
+    ${response}=    Get On Session
+    ...    alias=jsonplaceholder
+    ...    url=${PROJECT_JSON_COMMENTS_URI}
+    ...    params=${random_post_id_dictionary}
+    ...    expected_status=200
+    ${response_as_json}=    Set Variable    ${response.json()}
     Validate JSON Response Is List    ${response_as_json}
     Validate Each Item Has Required Keys within the Response    ${response_as_json}
 

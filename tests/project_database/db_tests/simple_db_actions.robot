@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation       Some example tests for illustrating database interactions. Warning! These are examples only, as no 
+Documentation       Some example tests for illustrating database interactions. Warning! These are examples only, as no
 ...                 real database information is provided.
 
 Resource            ../../../resources/project_database/db_actions_and_verifications.resource

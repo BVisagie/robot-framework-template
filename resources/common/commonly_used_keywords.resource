@@ -43,7 +43,7 @@ Convert JSON to Dict
     [Documentation]    This function converts a JSON string to a RobotFramework dictionary.
     [Arguments]    ${json_string}
 
-    ${dict}=    Evaluate    json.loads(''${json_string}'')    json
+    ${dict}=    Evaluate    json.loads($json_string)    json
     RETURN    ${dict}
 
 Generate DateTime String With Minutes Offset

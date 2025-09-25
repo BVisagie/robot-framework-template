@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation       Intended to host a collection of common / generic validation keywords that might be used in any
-...    project. No project specific keywords should be placed within resources/common!
+...                 project. No project specific keywords should be placed within resources/common!
 
 
 *** Keywords ***
@@ -15,4 +15,4 @@ Is Dictionary Empty
     [Documentation]    Based on the given dictionaries length determine if it's empty.
     [Arguments]    &{dictionary}
     ${dictionary_length}=    Get Length    ${dictionary}
-    IF    ${dictionary_length} == 0    The dictionary is empty.
+    Should Be Equal As Integers    ${dictionary_length}    0

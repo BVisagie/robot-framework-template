@@ -4,7 +4,7 @@ Documentation       For documentation on the browser automation keywords used be
 
 Resource            ../../libraries/robot_framework/web_testing_library.resource
 Resource            ../common/commonly_used_web_testing_keywords.resource
-Resource            ../../data/project_wikipedia/page_objects/index_of_all_page_objects.resource
+Resource            page_objects/index_of_all_page_objects.resource
 
 
 *** Keywords ***
@@ -13,7 +13,11 @@ Navigate from the landing page to the main page and verify a basic search
     ...    a number of actions resulting in a verification of navigation to the intended language specific page.
     [Arguments]    ${target_language}
 
-    Setup a new browser and page instance    https://www.wikipedia.org/
+    ${base_url}=    Set Variable If
+    ...    '${WIKIPEDIA_BASE_URL_OVERRIDE}'!=''
+    ...    ${WIKIPEDIA_BASE_URL_OVERRIDE}
+    ...    ${WIKIPEDIA_BASE_URL}
+    Setup a new browser and page instance    ${base_url}
 
     IF    '${target_language}'=='English'
         Click    ${ENGLISH_LANGUAGE_BUTTON_BY_TITLE}
