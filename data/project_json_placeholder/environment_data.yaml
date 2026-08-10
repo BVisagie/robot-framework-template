@@ -1,0 +1,6 @@
+# YAML variable file example (Robot Framework Variables setting).
+# Keys become ${PROJECT_JSON_*} scalars when imported.
+PROJECT_JSON_BASE_URI: https://jsonplaceholder.typicode.com
+PROJECT_JSON_POSTS_URI: /posts
+PROJECT_JSON_COMMENTS_URI: /comments
+PROJECT_JSON_ALBUMS_URI: /albums

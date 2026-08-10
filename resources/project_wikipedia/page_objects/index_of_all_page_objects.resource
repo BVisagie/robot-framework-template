@@ -3,13 +3,11 @@ Documentation       The purpose of this file is to be an index of all page objec
 ...                 file is not designed for performance reasons, but rather overall project convenience as you will
 ...                 have less files to import or reference when creating your keyword functionality.
 
+Resource            resources/project_wikipedia/page_objects/landing_page.resource
+Resource            resources/project_wikipedia/page_objects/main_page.resource
+Resource            resources/project_wikipedia/page_objects/wiki_page.resource
+
 
 *** Variables ***
-# Base URL for Wikipedia landing page
-${WIKIPEDIA_BASE_URL}=              https://www.wikipedia.org/
-# Optional environment override. If set, tests can use this instead of the default.
-${WIKIPEDIA_BASE_URL_OVERRIDE}=     %{WIKIPEDIA_BASE_URL}
-
-Resource                            landing_page.resource
-Resource                            main_page.resource
-Resource                            wiki_page.resource
+# Override with WIKIPEDIA_BASE_URL env var; falls back to the public Wikipedia homepage.
+${WIKIPEDIA_BASE_URL}=      %{WIKIPEDIA_BASE_URL=https://www.wikipedia.org/}

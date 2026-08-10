@@ -1,9 +1,9 @@
 import random
+
 from robot.api.deco import keyword
 
 
-# This is an example of adding a @keyword decorator to a Python method and then referencing it within your Robot
-# Framework code.
+# Example of exposing a Python helper as a Robot Framework keyword via @keyword.
 @keyword
 def get_random_int(min_value: int, max_value: int) -> int:
     """

@@ -1,9 +1,5 @@
 *** Settings ***
-Documentation       Some static data regarding the API test website: jsonplaceholder.typicode.com
+Documentation       Compatibility shim. Prefer importing the YAML variable file directly:
+...                 Variables    data/project_json_placeholder/environment_data.yaml
 
-
-*** Variables ***
-${PROJECT_JSON_BASE_URI}        https://jsonplaceholder.typicode.com
-${PROJECT_JSON_POSTS_URI}       /posts
-${PROJECT_JSON_COMMENTS_URI}    /comments
-${PROJECT_JSON_ALBUMS_URI}      /albums
+Variables           data/project_json_placeholder/environment_data.yaml

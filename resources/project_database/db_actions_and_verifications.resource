@@ -1,22 +1,22 @@
 *** Settings ***
 Documentation       Some example test actions that will be performed during database interactions.
 
-Resource            ../common/commonly_used_database_keywords.resource
-Resource            ../common/commonly_used_keywords.resource
-Resource            ../../data/project_database/static_database_info.resource
-Resource            ../../data/project_database/dummy_queries.resource
-Resource            ../../data/project_database/regex_templates_for_queries.resource
-Library             ../common_python/common_functions.py
+Resource            resources/common/commonly_used_database_keywords.resource
+Resource            resources/common/commonly_used_keywords.resource
+Resource            data/project_database/static_database_info.resource
+Resource            data/project_database/dummy_queries.resource
+Resource            data/project_database/regex_templates_for_queries.resource
+Library             resources/common_python/common_functions.py
 
 
 *** Variables ***
-# Environment-derived overrides (optional). If set in the environment, these can be used to compose DB dictionaries.
-${ENV_DB_HOST}=             %{DB_HOST}
-${ENV_DB_PORT}=             %{DB_PORT}
-${ENV_DB_SERVICE_NAME}=     %{DB_SERVICE_NAME}
-${ENV_DB_USER}=             %{DB_USER}
-${ENV_DB_PASSWORD}=         %{DB_PASSWORD}
-${ENV_DB_API_MODULE}=       %{DB_API_MODULE}
+# Optional environment overrides. Empty defaults keep suite import working when vars are unset.
+${ENV_DB_HOST}=                 %{DB_HOST=}
+${ENV_DB_PORT}=                 %{DB_PORT=}
+${ENV_DB_SERVICE_NAME}=         %{DB_SERVICE_NAME=}
+${ENV_DB_USER}=                 %{DB_USER=}
+${ENV_DB_PASSWORD: Secret}=     %{DB_PASSWORD=}
+${ENV_DB_API_MODULE}=           %{DB_API_MODULE=}
 
 
 *** Keywords ***
@@ -27,13 +27,12 @@ Example Oracle database test
 
     # The below keyword will modify the static query retrieve_some_data_example_oracle in place, thereby replacing
     # :VAR_ITEM_NO within the query with the provided value.
-    ${RETRIEVE_SOME_DATA_EXAMPLE_ORACLE}=
-    ...    Modify the given query replacing an item placeholder with the actual item
+    ${oracle_query}=    Modify the given query replacing an item placeholder with the actual item
     ...    target_query=${RETRIEVE_SOME_DATA_EXAMPLE_ORACLE}
     ...    target_item_no=${random_item_number}
 
     ${oracle_query_result_row}=    Execute SQL Query
-    ...    query=${RETRIEVE_SOME_DATA_EXAMPLE_ORACLE}
+    ...    query=${oracle_query}
     ...    target_database_information_dictionary=&{PROJECT_ORACLE_DB}
 
     # Dummy assertion that the weight of the given item as retrieved by the query is equal to 500
@@ -49,14 +48,14 @@ Example PostgreSQL database test
     ...    date_time_format=%Y-%m-%d %H:%M
     ...    minutes_offset=2
 
-    ${RETRIEVE_SOME_DATA_EXAMPLE_POSTGRESQL}=    Modify the given query adding a Item, Updated Date and Boolean
+    ${postgresql_query}=    Modify the given query adding a Item, Updated Date and Boolean
     ...    target_query=${RETRIEVE_SOME_DATA_EXAMPLE_POSTGRESQL}
     ...    target_item_no=${random_item_number}
     ...    target_updated_date_time=${updated_date_time_stamp}
     ...    target_bool=${False}
 
     ${postgresql_query_result_row}=    Execute SQL Query
-    ...    query=${RETRIEVE_SOME_DATA_EXAMPLE_POSTGRESQL}
+    ...    query=${postgresql_query}
     ...    target_database_information_dictionary=&{PROJECT_POSTGRESQL_DB}
 
     # Dummy assertion that the id of the given item as retrieved by the query is equal to 12345
@@ -72,21 +71,15 @@ Modify the given query adding a Item, Updated Date and Boolean
     ...    ${target_updated_date_time}
     ...    ${target_bool}
 
-    # 1)
     ${target_query}=    Modify the given query replacing an item placeholder with the actual item
     ...    target_query=${target_query}
     ...    target_item_no=${target_item_no}
-
-    # 2)
     ${target_query}=    Modify the given query replacing an updated date placeholder with the actual updated date
     ...    target_query=${target_query}
     ...    target_updated_date=${target_updated_date_time}
-
-    # 3)
     ${target_query}=    Modify the given query adding a target boolean
     ...    target_query=${target_query}
     ...    target_bool=${target_bool}
-
     RETURN    ${target_query}
 
 Modify the given query replacing an item placeholder with the actual item
@@ -100,35 +93,47 @@ Modify the given query replacing an item placeholder with the actual item
     ...    target_query=${target_query}
     ...    regex_pattern=${REGEX_PATTERN_ITEM_NO}
     ...    replace_with_value=${target_item_no}
-
     RETURN    ${result}
 
+Pick env value or default
+    [Documentation]    Return ${env_value} when non-empty, otherwise ${default_value}.
+    [Arguments]    ${env_value}    ${default_value}
+
+    IF    '${env_value}' != ''
+        RETURN    ${env_value}
+    ELSE
+        RETURN    ${default_value}
+    END
+
+Resolve database password from secret or default
+    [Documentation]    Prefer RF 7.4 Secret env override when set; otherwise use the static default string.
+    [Arguments]    ${default_password}
+
+    ${secret_password}=    Evaluate    $ENV_DB_PASSWORD.value
+    IF    '${secret_password}' != ''
+        RETURN    ${secret_password}
+    ELSE
+        RETURN    ${default_password}
+    END
+
 Build database info dictionary from environment
-    [Documentation]    Build a database info dictionary using environment variables if present; falls back to provided defaults.
+    [Documentation]    Build a database info dictionary using environment variables if present; falls back to provided
+    ...    defaults. Password prefers the RF 7.4 Secret env value when set.
     [Arguments]    &{defaults}
 
-    # Use defaults if ENV vars are empty
-    ${dbHost}=    Set Variable If    '${ENV_DB_HOST}'!=''    ${ENV_DB_HOST}    ${defaults.dbHost}
-    ${dbPort}=    Set Variable If    '${ENV_DB_PORT}'!=''    ${ENV_DB_PORT}    ${defaults.dbPort}
-    ${dbServiceName}=    Set Variable If
-    ...    '${ENV_DB_SERVICE_NAME}'!=''
-    ...    ${ENV_DB_SERVICE_NAME}
-    ...    ${defaults.dbServiceName}
-    ${dbUser}=    Set Variable If    '${ENV_DB_USER}'!=''    ${ENV_DB_USER}    ${defaults.dbUser}
-    ${dbPassword}=    Set Variable If    '${ENV_DB_PASSWORD}'!=''    ${ENV_DB_PASSWORD}    ${defaults.dbPassword}
-    ${dbApiModuleName}=    Set Variable If
-    ...    '${ENV_DB_API_MODULE}'!=''
-    ...    ${ENV_DB_API_MODULE}
-    ...    ${defaults.dbApiModuleName}
-
-    &{result}=    Create Dictionary
-    ...    dbHost=${dbHost}
-    ...    dbPort=${dbPort}
-    ...    dbServiceName=${dbServiceName}
-    ...    dbUser=${dbUser}
-    ...    dbPassword=${dbPassword}
-    ...    dbApiModuleName=${dbApiModuleName}
-
+    ${db_host}=    Pick env value or default    ${ENV_DB_HOST}    ${defaults.dbHost}
+    ${db_port}=    Pick env value or default    ${ENV_DB_PORT}    ${defaults.dbPort}
+    ${db_service_name}=    Pick env value or default    ${ENV_DB_SERVICE_NAME}    ${defaults.dbServiceName}
+    ${db_user}=    Pick env value or default    ${ENV_DB_USER}    ${defaults.dbUser}
+    ${db_api_module_name}=    Pick env value or default    ${ENV_DB_API_MODULE}    ${defaults.dbApiModuleName}
+    ${db_password}=    Resolve database password from secret or default    ${defaults.dbPassword}
+    VAR    &{result}=
+    ...    dbHost=${db_host}
+    ...    dbPort=${db_port}
+    ...    dbServiceName=${db_service_name}
+    ...    dbUser=${db_user}
+    ...    dbPassword=${db_password}
+    ...    dbApiModuleName=${db_api_module_name}
     RETURN    &{result}
 
 Modify the given query replacing an updated date placeholder with the actual updated date
@@ -142,7 +147,6 @@ Modify the given query replacing an updated date placeholder with the actual upd
     ...    target_query=${target_query}
     ...    regex_pattern=${REGEX_PATTERN_UPDATED_DATE}
     ...    replace_with_value=${target_updated_date}
-
     RETURN    ${result}
 
 Modify the given query adding a target boolean
@@ -156,21 +160,19 @@ Modify the given query adding a target boolean
     ...    target_query=${target_query}
     ...    regex_pattern=${REGEX_PATTERN_BOOLEAN}
     ...    replace_with_value=${target_bool}
-
     RETURN    ${result}
 
 Demonstrate building database info dictionary from environment (no connection)
     [Documentation]    Compose a DB info dictionary using environment variables (if set), falling back to provided
     ...    defaults. This keyword does not open a database connection.
-    [Arguments]    &{defaults}=&{PROJECT_POSTGRESQL_DB}
+    [Arguments]    ${defaults}=${PROJECT_POSTGRESQL_DB}
 
     &{db}=    Build database info dictionary from environment    &{defaults}
-
     Dictionary Should Contain Key    &{db}    dbHost
     Dictionary Should Contain Key    &{db}    dbPort
     Dictionary Should Contain Key    &{db}    dbServiceName
     Dictionary Should Contain Key    &{db}    dbUser
     Dictionary Should Contain Key    &{db}    dbApiModuleName
-
     Log
-    ...    DB config (redacted): host=${db.dbHost} port=${db.dbPort} db=${db.dbServiceName} user=${db.dbUser} module=${db.dbApiModuleName}
+    ...    DB config (redacted): host=${db.dbHost} port=${db.dbPort}
+    ...    db=${db.dbServiceName} user=${db.dbUser} module=${db.dbApiModuleName}

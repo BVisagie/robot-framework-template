@@ -4,5 +4,5 @@ Documentation       This is a location for storing page locator data related to 
 
 
 *** Variables ***
-# Needed a language agnostic hook here, as HTML values change based on language
-${MAIN_PAGE_SIMPLE_SEARCH_INPUT}=       //input[@type='search']
+# Prefer the primary search input id; Wikipedia also renders a sticky duplicate type=search field.
+${MAIN_PAGE_SIMPLE_SEARCH_INPUT}=       id=searchInput

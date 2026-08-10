@@ -1,6 +1,7 @@
-robotframework>=7.3.2
-robotframework-browser>=19.8.0  # Robot Framework Browser library powered by Playwright
+robotframework>=7.4.2
+robotframework-browser>=20.3.0  # Robot Framework Browser library powered by Playwright
 robotframework-requests>=0.9.7  # RequestsLibrary is a Robot Framework library aimed to provide HTTP api testing functionalities.
-robotframework-databaselibrary>=2.3.0  # The Database Library for Robot Framework allows you to query a database and verify the results.
-oracledb>=3.3.0  # python-oracledb is a Python programming language extension module allowing Python programs to connect to Oracle Database. It is the renamed, new major release of the popular cx_Oracle driver.
-psycopg>=3.2.10  # Psycopg 3 (binary/wheel) for modern PostgreSQL support
+robotframework-databaselibrary>=2.4.1  # The Database Library for Robot Framework allows you to query a database and verify the results.
+oracledb>=4.0.2  # python-oracledb is a Python programming language extension module allowing Python programs to connect to Oracle Database. It is the renamed, new major release of the popular cx_Oracle driver.
+psycopg>=3.3.4  # Psycopg 3 (binary/wheel) for modern PostgreSQL support
+PyYAML>=6.0.3  # Required for Robot Framework YAML variable files

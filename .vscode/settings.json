@@ -1,0 +1,11 @@
+{
+  "robotcode.robot.pythonPath": [
+    "./"
+  ],
+  "[robotframework]": {
+    "editor.defaultFormatter": "d-biehl.robotcode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+  }
+}

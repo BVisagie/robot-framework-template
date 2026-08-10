@@ -1,5 +1,5 @@
 # Minimal container for running Robot Framework tests (API + headless UI)
-FROM mcr.microsoft.com/devcontainers/python:3.13
+FROM mcr.microsoft.com/devcontainers/python:3.14
 
 # Build-time toggle to include dev tools inside the image (pre-commit, robocop, ruff)
 ARG INSTALL_DEV=false
@@ -13,7 +13,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/* \
-    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && apt-get update \
     && apt-get install -y --no-install-recommends nodejs \
     && npm -g i npm \
@@ -35,5 +35,5 @@ COPY . .
 # Default vars
 ENV HEADLESS_BROWSER=true
 
-CMD ["bash", "-lc", "robot --outputdir output tests/project_json_placeholder/api_tests"]
+CMD ["bash", "-lc", "robot --pythonpath . --outputdir output --exclude do_not_run tests/project_json_placeholder/api_tests"]
 

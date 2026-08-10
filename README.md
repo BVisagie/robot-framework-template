@@ -22,12 +22,15 @@ Official repository: [github.com/BVisagie/robot-framework-template](https://gith
 ## Directory Structure
 
 The repository comes with a pre-configured directory structure to keep your project organized and to stick with
-reference [Robot Framework Guidelines](https://docs.robotframework.org/docs):
+reference [Robot Framework Guidelines](https://docs.robotframework.org/docs/examples/project_structure):
 
 ```
 ├── .github
 │   └── workflows
-│       └── ci-cd.yml
+│       └── ci.yml
+├── .vscode
+│   ├── extensions.json
+│   └── settings.json
 ├── data
 │   ├── your_project
 │   ├── shared_data
@@ -46,6 +49,8 @@ reference [Robot Framework Guidelines](https://docs.robotframework.org/docs):
 │   ├── your_project
 │       └── your_test_cases.robot
 ├── requirements.txt
+├── requirements-dev.txt
+├── pyproject.toml
 ├── .gitattributes
 ├── .gitignore
 ├── README.md
@@ -58,6 +63,9 @@ reference [Robot Framework Guidelines](https://docs.robotframework.org/docs):
 - **resources**: Stores resource files such as shared keywords and project specific keywords.
 - **tests**: All test cases start here.
 - **requirements.txt**: Lists all Python dependencies required for the project.
+
+Imports are root-relative (for example `Resource    resources/...`) and rely on `--pythonpath .` as recommended in the
+official [project structure guide](https://docs.robotframework.org/docs/examples/project_structure).
 
 ## Sample Test Cases
 
@@ -79,30 +87,33 @@ Currently, the sample test cases cover:
 
 ### Dependencies
 
-* Python >= `3.13`
-* Node.js >= `22`
-* Robot Framework >= `7.1.1`
+* Python >= `3.14` (latest bugfix; see [Status of Python versions](https://devguide.python.org/versions/))
+* Node.js >= `24` (Active LTS; see [Node.js releases](https://nodejs.org/en/about/previous-releases))
+* Robot Framework >= `7.4.2`
 * Please see `requirements.txt` for all other Python and Robot Framework dependencies
 
 ### Installing for local development
 
-For step-by-step setup on your OS (Python 3.13+, Node 22+, venv, Playwright deps, and Browser init), follow the Quickstart Guides:
+For step-by-step setup on your OS (Python 3.14+, Node 24 Active LTS, venv, Playwright deps, and Browser init), follow the Quickstart Guides:
 
-- Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md)
+- Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md) (Ubuntu/Debian for official Playwright UI deps; Fedora OK for API, Docker recommended for UI)
 - Windows: [docs/quickstart-windows.md](docs/quickstart-windows.md)
 
 ### Quickstart commands
 
 ```sh
-# Lint and format checks (Robocop v6+)
+# Lint and format checks (Robocop)
 robocop check .
 robocop format .
 
 # Run API tests
-robot --outputdir output tests/project_json_placeholder/api_tests
+robot --pythonpath . --outputdir output tests/project_json_placeholder/api_tests
 
 # Run UI tests (headless by default)
-robot --outputdir output tests/project_wikipedia/ui_tests
+robot --pythonpath . --outputdir output tests/project_wikipedia/ui_tests
+
+# Run everything except placeholder DB examples
+robot --pythonpath . --outputdir output --exclude do_not_run tests
 ```
 
 ### Quickstart Guides
@@ -114,7 +125,7 @@ robot --outputdir output tests/project_wikipedia/ui_tests
 Optional developer tooling:
 
 ```sh
-# Install dev tools (pre-commit, Robocop v6+, Ruff)
+# Install dev tools (pre-commit, Robocop, Ruff)
 pip install -r requirements-dev.txt
 pre-commit install
 ```
@@ -126,13 +137,13 @@ See the platform-specific Quickstart Guides for creating, activating, and using 
 ## Notes and recommendations
 
 - IDE and plugins
-  - Primary recommendation: [RobotCode](https://robotcode.io/) — multi‑IDE language server, debugger, analyzer, REPL, refactoring, profiles via `robot.toml`.
+  - Primary recommendation: [RobotCode](https://robotcode.io/) — multi‑IDE language server, debugger, analyzer, REPL, refactoring.
+  - This template commits `.vscode/settings.json` with `robotcode.robot.pythonPath: ["./"]` so root-relative imports resolve in the IDE.
   - Alternative: [Hyper RobotFramework Support](https://plugins.jetbrains.com/plugin/16382-hyper-robotframework-support).
   - Editors: [VS Code](https://code.visualstudio.com/) or [JetBrains IDEs](https://www.jetbrains.com/pycharm/) both work well.
-  - Tip: enable Robotidy/Robocop integration or use pre‑commit to keep quality consistent.
+  - Tip: enable Robocop integration or use pre‑commit to keep quality consistent.
 - Linting/formatting
-  - [Robotidy](https://github.com/MarketSquare/robotframework-tidy) for formatting.
-  - [Robocop](https://github.com/MarketSquare/robotframework-robocop) for static analysis.
+  - [Robocop](https://robocop.readthedocs.io/) for static analysis and formatting (`robocop check` / `robocop format`).
   - This template includes basic configs and optional pre‑commit hooks.
 
 ## Customization Options
@@ -147,6 +158,7 @@ This template is designed to be flexible and easily extendable. You can:
 - `HEADLESS_BROWSER` (true/false) to control headless mode (defaults to true).
 - `WIKIPEDIA_BASE_URL` to override the default Wikipedia base URL.
 - Database-related variables (examples only): `DB_HOST`, `DB_PORT`, `DB_SERVICE_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_API_MODULE`.
+  - `DB_PASSWORD` is consumed as a Robot Framework 7.4+ Secret variable.
 
 ## A word on Coding Style
 
@@ -154,13 +166,15 @@ This template is designed to be flexible and easily extendable. You can:
   If you are used to using TAB, just set TABBING to go four spaces in your IDE.
     - [Robot Framework User Guide - Space Separated Format](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#space-separated-format)
     - Official Python style guides regarding [Tabs or Spaces](https://peps.python.org/pep-0008/#tabs-or-spaces).
+    - Community [Style Guide](https://docs.robotframework.org/docs/style_guide)
 
 ### RF-native first
 - Prefer native Robot Framework syntax, libraries, and patterns. Use Python only when a clear gap exists.
-- Examples here keep Python to a minimum (e.g., a single helper function) and showcase RF v7+ features.
+- Examples keep Python to a minimum (e.g., a single helper function) and showcase RF 7.4+ features such as `VAR`,
+  `TRY`/`EXCEPT`/`FINALLY`, Secret variables, and YAML variable files.
 
 ### Database examples (non-functional by default)
-- DB examples are placeholders, tagged to avoid accidental execution.
+- DB examples are placeholders, tagged `do_not_run` to avoid accidental execution.
 - You can optionally provide DB settings through environment variables and build a `&{db}` dictionary using the provided keyword.
 - See the keywords in `resources/project_database/db_actions_and_verifications.resource` for details.
 
