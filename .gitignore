@@ -1,15 +1,17 @@
-# IDE's
+# IDEs
 .idea
-.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
 # Reports and logs
 playwright-log.txt
 report.html
 log.html
-log
+log/
 output/
+output.xml
 *.old
-*.xml
 reports/
 testresults/
 pip-log.txt
@@ -27,11 +29,9 @@ env.bak/
 venv.bak/
 
 *.iml
-python
-__pycache__
+__pycache__/
 .bash_history
 .cache/
 .pytest_cache/
 .run
-browser
-.env
+browser/

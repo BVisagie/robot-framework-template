@@ -151,18 +151,26 @@ robocop format .
 
 ## 6) Run the tests
 
-Headless mode is the default.
+Headless mode is the default. Always pass `--pythonpath .` from the project root so root-relative
+`Resource` / `Library` / `Variables` imports resolve (see the official
+[project structure guide](https://docs.robotframework.org/docs/examples/project_structure)).
 
 - API tests:
 
 ```sh
-robot --outputdir output tests/project_json_placeholder/api_tests
+robot --pythonpath . --outputdir output tests/project_json_placeholder/api_tests
 ```
 
 - UI tests (Wikipedia demo):
 
 ```sh
-robot --outputdir output tests/project_wikipedia/ui_tests
+robot --pythonpath . --outputdir output tests/project_wikipedia/ui_tests
+```
+
+- All runnable samples (excludes placeholder DB examples):
+
+```sh
+robot --pythonpath . --outputdir output --exclude do_not_run tests
 ```
 
 ## 7) Useful environment variables

@@ -2,7 +2,7 @@
 Documentation       This is a location for storing shared keywords that may be applicable to any project.
 ...                 No project specific keywords should be placed within resources/common!
 
-Resource            ../../libraries/robot_framework/common.resource
+Resource            libraries/robot_framework/common.resource
 
 
 *** Keywords ***
@@ -25,7 +25,6 @@ Generate DateTime String With Hour Offset
     ...    date=${now}
     ...    time=${hour_offset} hour
     ...    result_format=${date_time_format}
-
     RETURN    ${result}
 
 Generate DateTime String With Day Offset
@@ -36,14 +35,13 @@ Generate DateTime String With Day Offset
 
     ${now}=    Get Current Date
     ${result}=    Subtract Time From Date    date=${now}    time=${day_offset} day    result_format=${date_time_format}
-
     RETURN    ${result}
 
 Convert JSON to Dict
     [Documentation]    This function converts a JSON string to a RobotFramework dictionary.
     [Arguments]    ${json_string}
 
-    ${dict}=    Evaluate    json.loads($json_string)    json
+    ${dict}=    Evaluate    json.loads($json_string)    modules=json
     RETURN    ${dict}
 
 Generate DateTime String With Minutes Offset
@@ -57,5 +55,4 @@ Generate DateTime String With Minutes Offset
     ...    date=${now}
     ...    time=${minutes_offset} minutes
     ...    result_format=${date_time_format}
-
     RETURN    ${result}

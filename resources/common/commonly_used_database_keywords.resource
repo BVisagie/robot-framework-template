@@ -2,18 +2,17 @@
 Documentation       A suite of Keywords meant to cover all the common database actions that might need to occur.
 ...                 No project specific keywords should be placed within resources/common!
 
-Resource            ../../libraries/robot_framework/database_library.resource
-Resource            ../../libraries/robot_framework/common.resource
-Resource            commonly_used_validation_keywords.resource
+Resource            libraries/robot_framework/database_library.resource
+Resource            libraries/robot_framework/common.resource
+Resource            resources/common/commonly_used_validation_keywords.resource
 
 
 *** Keywords ***
 Open connection to target database
-    [Documentation]    TODO
+    [Documentation]    Open a DatabaseLibrary connection using the provided database info dictionary.
     [Arguments]    &{target_database_information_dictionary}
 
     Should Not Be Empty    &{target_database_information_dictionary}
-
     Log    Now attempting to connect to target test database: ${target_database_information_dictionary.dbHost}
 
     TRY
@@ -26,11 +25,14 @@ Open connection to target database
         ...    db_port=${target_database_information_dictionary.dbPort}
     EXCEPT    AS    ${msg}
         Fail
-        ...    Failed to connect to database at host=${target_database_information_dictionary.dbHost} port=${target_database_information_dictionary.dbPort}.
+        ...    Failed to connect to database at host=${target_database_information_dictionary.dbHost}
+        ...    port=${target_database_information_dictionary.dbPort}.
         ...    ${msg}
     END
 
 Close connection from the current database
+    [Documentation]    Disconnect from the currently open database connection.
+
     TRY
         DatabaseLibrary.Disconnect From Database
     EXCEPT    AttributeError: 'NoneType' object has no attribute 'close'    AS    ${msg}
@@ -46,10 +48,8 @@ Execute SQL Query
     ...    ${retry_interval}=1 second
     ...    ${fail_timeout}=2 minutes
     [Timeout]    ${fail_timeout}
-    [Documentation]    Small wrapper around DatabaseLibrary.Query, to check whether the type of statement matches the
-    ...    content. With a retry mechanism, if you need it.
 
-    LOG    ${query}
+    Log    ${query}
     Should Not Match Regexp
     ...    ${query}
     ...    ^\\s*update\\s
@@ -64,11 +64,8 @@ Execute SQL Query
     ...    msg=This SQL statement is not just a select! Contains: insert. Use: 'Execute Sql Statement'.
 
     Open connection to target database    &{target_database_information_dictionary}
-
     ${result}=    Wait Until Keyword Succeeds    ${timeout}    ${retry_interval}    DatabaseLibrary.Query    ${query}
-
     Close connection from the current database
-
     RETURN    ${result}
 
 Execute SQL Statement
@@ -80,7 +77,7 @@ Execute SQL Statement
     ...    ${omitTrailingSemicolon}=${True}
     [Timeout]    ${timeout}
 
-    LOG    ${statement}
+    Log    ${statement}
     Should Contain Any
     ...    ${statement}
     ...    begin
@@ -92,23 +89,20 @@ Execute SQL Statement
     ...    msg=This SQL statement does not seem to be a statement! Perhaps use: 'Execute sql query'.
 
     Open connection to target database    &{target_database_information_dictionary}
-
     DatabaseLibrary.Set Auto Commit    autoCommit=${True}
     DatabaseLibrary.Execute Sql String
     ...    sqlString=${statement}
-    ...    omitTrailingSemicolon=${omitTrailingSemicolon} # See documentation regarding omitTrailingSemicolon.
-
+    ...    omitTrailingSemicolon=${omitTrailingSemicolon}    # See documentation regarding omitTrailingSemicolon.
     Close connection from the current database
 
 Open PostgreSQL connection using custom params (psycopg3)
     [Documentation]    Connect using psycopg3 with custom parameters (e.g., sslmode). Useful when you need additional
     ...    driver-level options. The db dictionary should include: dbApiModuleName=psycopg, dbServiceName,
     ...    dbUser, dbPassword, dbHost, dbPort. Default sslmode is 'prefer'.
-    [Arguments]    &{target_database_information_dictionary}
-    ...    ${sslmode}=prefer
+    [Arguments]    ${sslmode}=prefer
+    ...    &{target_database_information_dictionary}
 
     Should Not Be Empty    &{target_database_information_dictionary}
-
     TRY
         DatabaseLibrary.Connect To Database Using Custom Params
         ...    ${target_database_information_dictionary.dbApiModuleName}
@@ -120,7 +114,8 @@ Open PostgreSQL connection using custom params (psycopg3)
         ...    sslmode='${sslmode}'
     EXCEPT    AS    ${msg}
         Fail
-        ...    Failed to connect (custom params) to ${target_database_information_dictionary.dbHost}:${target_database_information_dictionary.dbPort}.
+        ...    Failed to connect (custom params) to
+        ...    ${target_database_information_dictionary.dbHost}:${target_database_information_dictionary.dbPort}.
         ...    ${msg}
     END
 

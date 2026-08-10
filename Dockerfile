@@ -35,5 +35,5 @@ COPY . .
 # Default vars
 ENV HEADLESS_BROWSER=true
 
-CMD ["bash", "-lc", "robot --outputdir output tests/project_json_placeholder/api_tests"]
+CMD ["bash", "-lc", "robot --pythonpath . --outputdir output --exclude do_not_run tests/project_json_placeholder/api_tests"]
 

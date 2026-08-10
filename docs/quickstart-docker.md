@@ -35,7 +35,7 @@ docker run --rm -e HEADLESS_BROWSER=true rf-template:dev
 Override the command to run a different suite (e.g., UI tests):
 ```sh
 docker run --rm -e HEADLESS_BROWSER=true rf-template:runtime \
-  robot --outputdir output tests/project_wikipedia/ui_tests
+  robot --pythonpath . --outputdir output tests/project_wikipedia/ui_tests
 ```
 
 Mount your local workspace (optional) to persist outputs to the host:
@@ -43,7 +43,7 @@ Mount your local workspace (optional) to persist outputs to the host:
 docker run --rm -e HEADLESS_BROWSER=true \
   -v "$(pwd)":/workspace \
   rf-template:runtime \
-  robot --outputdir /workspace/output tests/project_json_placeholder/api_tests
+  robot --pythonpath . --outputdir /workspace/output tests/project_json_placeholder/api_tests
 ```
 
 ## Environment variables
