@@ -96,7 +96,7 @@ Currently, the sample test cases cover:
 
 For step-by-step setup on your OS (Python 3.14+, Node 24 Active LTS, venv, Playwright deps, and Browser init), follow the Quickstart Guides:
 
-- Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md)
+- Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md) (Ubuntu/Debian for official Playwright UI deps; Fedora OK for API, Docker recommended for UI)
 - Windows: [docs/quickstart-windows.md](docs/quickstart-windows.md)
 
 ### Quickstart commands

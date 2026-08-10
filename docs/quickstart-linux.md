@@ -4,6 +4,12 @@ This guide takes you from a fresh clone to running the sample tests locally.
 
 Examples below cover both **Ubuntu/Debian (`apt`)** and **Fedora (`dnf`)**. Use the section that matches your distribution.
 
+Important for UI tests: Playwright only officially supports Debian/Ubuntu on Linux
+([system requirements](https://playwright.dev/docs/intro#system-requirements)).
+`npx playwright install-deps` uses `apt-get` and **will fail on Fedora**. Fedora is fully fine for
+API tests and general Robot Framework work; for local UI runs on Fedora use the
+[Docker quickstart](quickstart-docker.md) (recommended) or the best-effort Fedora notes in section 4.
+
 ## Prerequisites
 
 - Python 3.14+ (latest bugfix release line)
@@ -12,7 +18,7 @@ Examples below cover both **Ubuntu/Debian (`apt`)** and **Fedora (`dnf`)**. Use 
 
 ### Where to run commands
 
-- System-level installs (package manager, Node setup, `sudo npx playwright install-deps`) can be run from any directory.
+- System-level installs (package manager, Node setup, Playwright OS deps on Ubuntu/Debian) can be run from any directory.
 - Project-specific steps (e.g., `git clone`, `cd robot-framework-template`, creating/activating `venv`, `pip install -r requirements.txt`, `rfbrowser init`, `robot ...`) should be run from the project root directory unless noted otherwise.
 
 ## Installing Python 3.14+
