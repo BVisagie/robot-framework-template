@@ -2,6 +2,8 @@
 
 This guide takes you from a fresh clone to running the sample tests locally.
 
+Examples below cover both **Ubuntu/Debian (`apt`)** and **Fedora (`dnf`)**. Use the section that matches your distribution.
+
 ## Prerequisites
 
 - Python 3.14+ (latest bugfix release line)
@@ -10,7 +12,7 @@ This guide takes you from a fresh clone to running the sample tests locally.
 
 ### Where to run commands
 
-- System-level installs (e.g., `sudo apt-get install ...`, Node setup, `sudo npx playwright install-deps`) can be run from any directory.
+- System-level installs (package manager, Node setup, `sudo npx playwright install-deps`) can be run from any directory.
 - Project-specific steps (e.g., `git clone`, `cd robot-framework-template`, creating/activating `venv`, `pip install -r requirements.txt`, `rfbrowser init`, `robot ...`) should be run from the project root directory unless noted otherwise.
 
 ## Installing Python 3.14+
@@ -19,7 +21,8 @@ If Python 3.14 is not installed, either install from the official downloads or u
 
 - Official downloads: https://www.python.org/downloads/
 - Status of Python versions: https://devguide.python.org/versions/
-- Ubuntu/Debian example:
+
+### Ubuntu / Debian (`apt`)
 
 ```sh
 sudo apt-get update
@@ -30,9 +33,25 @@ sudo apt-get install -y python3.14 python3.14-venv
 python3.14 --version
 ```
 
+### Fedora (`dnf`)
+
+```sh
+sudo dnf install -y python3.14
+python3.14 --version
+```
+
+If your Fedora release does not yet ship `python3.14` in the default repos, install the newest available 3.x line from Fedora (or use the official python.org installer) and ensure it is 3.14+:
+
+```sh
+sudo dnf install -y python3
+python3 --version
+```
+
 ## Installing Node.js 24+
 
-Install the Active LTS (24.x / Krypton) from NodeSource and verify:
+Install the Active LTS (24.x / Krypton) and verify with `node -v` / `npm -v`.
+
+### Ubuntu / Debian (`apt` + NodeSource)
 
 ```sh
 curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
@@ -57,9 +76,18 @@ sudo apt-get install -y nodejs
 node -v && npm -v
 ```
 
-Alternative: install Node.js via nvm (user‑space)
+### Fedora (`dnf` + NodeSource)
 
-If you prefer to avoid apt entirely, use nvm and install Node 24 Active LTS into your user profile:
+```sh
+curl -fsSL https://rpm.nodesource.com/setup_24.x | sudo bash -
+sudo dnf install -y nodejs
+node -v
+npm -v
+```
+
+### Alternative on any distro: nvm (user‑space)
+
+If you prefer to avoid system packages, use nvm and install Node 24 Active LTS into your user profile:
 
 ```sh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.6/install.sh | bash
@@ -71,6 +99,16 @@ node -v && npm -v
 ```
 
 ## 1) Clone and enter the project
+
+Install Git first if needed:
+
+```sh
+# Ubuntu / Debian
+sudo apt-get install -y git
+
+# Fedora
+sudo dnf install -y git
+```
 
 ```sh
 git clone https://github.com/BVisagie/robot-framework-template
@@ -112,8 +150,13 @@ sudo npx playwright install-deps
 If you see "sudo: npx: command not found", ensure npm/npx is available for root:
 
 ```sh
+# Ubuntu / Debian
 sudo apt-get install -y nodejs || true
 sudo apt-get install -y npm || true
+
+# Fedora
+sudo dnf install -y nodejs || true
+
 # open a new shell or re-login, then retry
 sudo npx playwright install-deps
 ```
