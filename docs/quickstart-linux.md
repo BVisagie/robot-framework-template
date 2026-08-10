@@ -4,8 +4,8 @@ This guide takes you from a fresh clone to running the sample tests locally.
 
 ## Prerequisites
 
-- Python 3.13+
-- Node.js 22+
+- Python 3.14+ (latest bugfix release line)
+- Node.js 24+ (Active LTS)
 - Git
 
 ### Where to run commands
@@ -13,11 +13,12 @@ This guide takes you from a fresh clone to running the sample tests locally.
 - System-level installs (e.g., `sudo apt-get install ...`, Node setup, `sudo npx playwright install-deps`) can be run from any directory.
 - Project-specific steps (e.g., `git clone`, `cd robot-framework-template`, creating/activating `venv`, `pip install -r requirements.txt`, `rfbrowser init`, `robot ...`) should be run from the project root directory unless noted otherwise.
 
-## Installing Python 3.13+
+## Installing Python 3.14+
 
-If Python 3.13 is not installed, either install from the official downloads or use your distro's packages.
+If Python 3.14 is not installed, either install from the official downloads or use your distro's packages.
 
 - Official downloads: https://www.python.org/downloads/
+- Status of Python versions: https://devguide.python.org/versions/
 - Ubuntu/Debian example:
 
 ```sh
@@ -25,16 +26,16 @@ sudo apt-get update
 sudo apt-get install -y software-properties-common
 sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt-get update
-sudo apt-get install -y python3.13 python3.13-venv
-python3.13 --version
+sudo apt-get install -y python3.14 python3.14-venv
+python3.14 --version
 ```
 
-## Installing Node.js 22+
+## Installing Node.js 24+
 
-Install the current LTS (22.x) from NodeSource and verify:
+Install the Active LTS (24.x / Krypton) from NodeSource and verify:
 
 ```sh
-curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt-get install -y nodejs
 node -v
 npm -v
@@ -50,22 +51,22 @@ sudo add-apt-repository -r ppa:deadsnakes/ppa || true
 sudo rm -f /etc/apt/sources.list.d/deadsnakes-ubuntu-ppa*.list
 sudo apt-get update
 
-# rerun NodeSource setup and install Node.js 22
-curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+# rerun NodeSource setup and install Node.js 24 Active LTS
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt-get install -y nodejs
 node -v && npm -v
 ```
 
 Alternative: install Node.js via nvm (user‑space)
 
-If you prefer to avoid apt entirely, use nvm and install Node 22 LTS into your user profile:
+If you prefer to avoid apt entirely, use nvm and install Node 24 Active LTS into your user profile:
 
 ```sh
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.6/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-nvm install 22
-nvm use 22
+nvm install 24
+nvm use 24
 node -v && npm -v
 ```
 
@@ -79,9 +80,9 @@ cd robot-framework-template
 ## 2) Create and activate a virtual environment
 
 ```sh
-python3 -m venv venv
+python3.14 -m venv venv
 source venv/bin/activate
-python --version  # should be 3.13+
+python --version  # should be 3.14+
 ```
 
 Upgrade pip:
@@ -100,7 +101,7 @@ pip install -r requirements-dev.txt
 
 ## 4) Install Node.js and Playwright browser deps
 
-If Node 22+ is not yet installed, complete the steps in "Installing Node.js 22+" above. Then install Playwright system deps:
+If Node 24+ is not yet installed, complete the steps in "Installing Node.js 24+" above. Then install Playwright system deps:
 
 - If Node was installed system-wide (NodeSource):
 
@@ -188,5 +189,5 @@ export WIKIPEDIA_BASE_URL=https://www.wikipedia.org/
 
 ## 8) Troubleshooting
 
-- If browsers fail to launch, re-run `rfbrowser init` after ensuring Node 22+ and `sudo npx playwright install-deps` are installed.
+- If browsers fail to launch, re-run `rfbrowser init` after ensuring Node 24+ and `sudo npx playwright install-deps` are installed.
 - For DB placeholders, tests are tagged `do_not_run` by default and are documentation-only.

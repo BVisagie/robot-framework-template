@@ -87,14 +87,14 @@ Currently, the sample test cases cover:
 
 ### Dependencies
 
-* Python >= `3.13`
-* Node.js >= `22`
+* Python >= `3.14` (latest bugfix; see [Status of Python versions](https://devguide.python.org/versions/))
+* Node.js >= `24` (Active LTS; see [Node.js releases](https://nodejs.org/en/about/previous-releases))
 * Robot Framework >= `7.4.2`
 * Please see `requirements.txt` for all other Python and Robot Framework dependencies
 
 ### Installing for local development
 
-For step-by-step setup on your OS (Python 3.13+, Node 22+, venv, Playwright deps, and Browser init), follow the Quickstart Guides:
+For step-by-step setup on your OS (Python 3.14+, Node 24 Active LTS, venv, Playwright deps, and Browser init), follow the Quickstart Guides:
 
 - Linux: [docs/quickstart-linux.md](docs/quickstart-linux.md)
 - Windows: [docs/quickstart-windows.md](docs/quickstart-windows.md)
