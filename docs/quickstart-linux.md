@@ -145,7 +145,11 @@ pip install -r requirements-dev.txt
 
 ## 4) Install Node.js and Playwright browser deps
 
-If Node 24+ is not yet installed, complete the steps in "Installing Node.js 24+" above. Then install Playwright system deps:
+If Node 24+ is not yet installed, complete the steps in "Installing Node.js 24+" above.
+
+### Ubuntu / Debian (officially supported by Playwright)
+
+Install Playwright OS dependencies, then initialize Robot Framework Browser:
 
 - If Node was installed system-wide (NodeSource):
 
@@ -156,13 +160,8 @@ sudo npx playwright install-deps
 If you see "sudo: npx: command not found", ensure npm/npx is available for root:
 
 ```sh
-# Ubuntu / Debian
 sudo apt-get install -y nodejs || true
 sudo apt-get install -y npm || true
-
-# Fedora
-sudo dnf install -y nodejs || true
-
 # open a new shell or re-login, then retry
 sudo npx playwright install-deps
 ```
@@ -173,11 +172,30 @@ sudo npx playwright install-deps
 sudo -E env "PATH=$PATH" npx playwright install-deps
 ```
 
-Initialize Robot Framework Browser (downloads browser engines for tests):
-
 ```sh
 rfbrowser init
 ```
+
+### Fedora (UI path not officially supported by Playwright)
+
+Do **not** run `npx playwright install-deps` on Fedora. Playwright detects a non-Ubuntu OS, falls back to
+`ubuntu24.04` packages, and then fails with `apt-get: command not found`.
+
+Recommended options:
+
+1. **Supported for UI:** use the [Docker quickstart](quickstart-docker.md) (Ubuntu-based image with Browser/Playwright deps).
+2. **API-only on the host:** skip this section’s OS-deps step and run the API samples in section 6.
+3. **Best-effort local Chromium UI (unsupported):** skip `install-deps`, initialize browsers only, then try the Wikipedia suite.
+   This template launches Chromium only; community reports often show Chromium working on recent Fedora without
+   `install-deps`, but this is outside Playwright’s supported matrix and may break across Fedora releases.
+
+```sh
+# Fedora best-effort local UI only — skip install-deps
+rfbrowser init
+robot --pythonpath . --outputdir output tests/project_wikipedia/ui_tests
+```
+
+If Chromium fails to start, prefer Docker rather than chasing distro-specific shared libraries.
 
 ## 5) (Optional) Pre-commit hooks
 
@@ -238,5 +256,8 @@ export WIKIPEDIA_BASE_URL=https://www.wikipedia.org/
 
 ## 8) Troubleshooting
 
-- If browsers fail to launch, re-run `rfbrowser init` after ensuring Node 24+ and `sudo npx playwright install-deps` are installed.
+- Ubuntu/Debian UI: re-run `rfbrowser init` after Node 24+ and `sudo npx playwright install-deps` are installed.
+- Fedora UI: if you saw `apt-get: command not found` from `playwright install-deps`, that is expected — Playwright does not
+  officially support Fedora. Use [Docker](quickstart-docker.md) for a supported UI path, or try the best-effort
+  `rfbrowser init` flow in section 4.
 - For DB placeholders, tests are tagged `do_not_run` by default and are documentation-only.
