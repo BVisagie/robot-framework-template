@@ -8,7 +8,7 @@ python -m pip install -r requirements-dev.txt
 pre-commit install
 ```
 
-Add UI dependencies and Node 26.11.1 only when working on Browser examples.
+Add UI dependencies, Node 26.11.1, and npm 12.2.0 only when working on Browser examples.
 
 ## Read-only checks
 
@@ -112,6 +112,7 @@ latest stable releases:
 | Browser / PyYAML | 20.6.0 / 6.0.3 |
 | Robocop / Ruff | 9.1.0 / 0.17.0 |
 | pre-commit / Markdown | 4.7.0 / 3.11.1 |
+| npm | 12.2.0 |
 | actions/checkout | v7.0.1 |
 | actions/setup-python | v7.0.0 |
 | actions/setup-node | v7.1.0 |

@@ -1,5 +1,5 @@
 # Shared Python runtime; the last stage is the lightweight default build.
-FROM python:3.15.0-slim-bookworm AS base
+FROM python:3.15.0-slim-trixie AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -22,9 +22,12 @@ CMD ["tests/features", "tests/api", "tests/database"]
 
 # Browser's own Playwright version installs its matching Chromium and OS dependencies.
 FROM base AS ui
-COPY --from=node:26.11.1-bookworm-slim /usr/local/ /usr/local/
+COPY --from=node:26.11.1-trixie-slim /usr/local/ /usr/local/
 COPY requirements-ui.txt ./
-RUN python -m pip install --no-cache-dir -r requirements-ui.txt \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libatomic1 \
+    && npm install --global npm@12.2.0 \
+    && python -m pip install --no-cache-dir -r requirements-ui.txt \
     && rfbrowser init --with-deps chromium \
     && rm -rf /var/lib/apt/lists/*
 CMD ["tests"]

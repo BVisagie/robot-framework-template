@@ -49,6 +49,7 @@ On a [Playwright-supported Linux distribution](https://playwright.dev/docs/intro
 
 ```sh
 python -m pip install -r requirements-ui.txt
+npm install --global npm@12.2.0
 rfbrowser init --with-deps chromium
 python -m robot --pythonpath . --outputdir output/ui tests/ui
 ```

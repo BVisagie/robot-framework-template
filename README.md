@@ -32,6 +32,7 @@ UI tests additionally need **Node.js 26.11.1** (Current) and the optional Browse
 
 ```sh
 python -m pip install -r requirements-ui.txt
+npm install --global npm@12.2.0
 rfbrowser init chromium
 python -m robot --pythonpath . --outputdir output/ui tests/ui
 ```
