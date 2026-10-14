@@ -41,9 +41,13 @@ Update and delete change only the selected row
     Catalog database item should match    1    Robot Framework guide    5
 
 An explicit rollback restores the original quantity
-    [Documentation]    Disable DatabaseLibrary's automatic commit for a controlled transaction.
+    [Documentation]    Read an uncommitted update, roll it back, and verify the original value.
     Execute SQL String    UPDATE items SET quantity = 99 WHERE id = 1    no_transaction=${True}
-    Execute SQL String    ROLLBACK    no_transaction=${True}
+    TRY
+        Catalog database item should match    1    Robot Framework guide    99    no_transaction=${True}
+    FINALLY
+        Execute SQL String    ROLLBACK    no_transaction=${True}
+    END
     Catalog database item should match    1    Robot Framework guide    5
 
 

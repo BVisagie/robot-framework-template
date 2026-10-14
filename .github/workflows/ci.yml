@@ -102,7 +102,7 @@ jobs:
       - name: Install Browser and its matching Chromium dependencies
         run: |
           python -m pip install -r requirements-ui.txt
-          rfbrowser init --with-deps chromium
+          python scripts/init_browser.py --with-deps
       - name: Run local browser and API to UI to SQLite journey
         run: python -m robot --pythonpath . --outputdir output/ui tests/ui
       - uses: actions/upload-artifact@v7.0.2
@@ -155,7 +155,7 @@ jobs:
         if: inputs.external_demo == 'wikipedia'
         run: |
           python -m pip install -r requirements-ui.txt
-          rfbrowser init --with-deps chromium
+          python scripts/init_browser.py --with-deps
       - name: Run the explicitly selected public-service example
         env:
           DEMO: ${{ inputs.external_demo }}

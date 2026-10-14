@@ -71,7 +71,12 @@ interpreter as Robot. It selects an available loopback port and creates a tempor
 database from [the shared YAML seed](../data/catalog.yaml).
 
 Readiness is checked through an atomic JSON startup record and `/health`, with a
-bounded retry. Each API, database, or UI suite owns its fixture. Each test resets
+bounded loop. The loop checks whether the process is still running before each
+readiness attempt. A crash fails immediately with its exit code and stderr path;
+only an unready running process waits for the startup timeout. The lifecycle test
+uses the default 10-second startup timeout and a 5-second test timeout to catch
+regressions that retry a dead process. Each API, database, or UI suite owns its
+fixture. Each test resets
 the seed. UI tests additionally create a new Browser context and close it during
 teardown. Database and Browser teardown use FINALLY so fixture cleanup is still
 attempted if another cleanup step fails.
@@ -84,7 +89,11 @@ state even if the scenario fails earlier.
 The database example connects using DatabaseLibrary's `sqlite3` driver. SQL uses
 `?` placeholders with `parameters=${parameters}`. DatabaseLibrary normally commits
 successful operations; the rollback scenario uses `no_transaction=${True}` to
-control the transaction explicitly. See the
+control the transaction explicitly for both the update and its assertion query.
+It checks the uncommitted quantity is 99, rolls back in FINALLY, and checks the
+original quantity is 5. A no-op update therefore fails. While the transaction is
+open, use the same database connection for reads; API resets or other writes on
+the fixture's connection would encounter SQLite's write lock. See the
 [DatabaseLibrary guidance](https://github.com/MarketSquare/Robotframework-Database-Library#commit-behavior)
 for details.
 

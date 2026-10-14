@@ -135,10 +135,24 @@ dependencies are resolved by pip. When updating a dependency:
 2. Align developer-tool versions with `.pre-commit-config.yaml` and test the hooks.
 3. Run the appropriate core/UI checks and update documentation for behavior changes.
 4. Reinitialize Browser with `rfbrowser clean-node` followed by
-   `rfbrowser init chromium` if its version changes. On supported Linux, use
-   `rfbrowser init --with-deps chromium` when OS dependencies need installation.
+   `python scripts/init_browser.py` if its version changes. On supported Linux,
+   add `--with-deps` when OS dependencies need installation. Review any newly
+   unapproved install scripts before updating the initializer's exact approvals.
 5. Build and run both Docker targets for runtime changes.
 
 Update runtime pins in Docker and CI together with the documented setup versions.
 Validate the complete dependency set on Ubuntu, Windows, and both Docker targets
 before claiming support for a newer runtime.
+
+[The initializer](../scripts/init_browser.py) adds only `protobufjs@7.6.6` to
+Browser's shipped `allowScripts` approvals. Browser 20.6.0's lockfile resolves that
+version while its policy still names 7.6.5. The reviewed postinstall checks version
+prefixes; it does not download binaries. The policy also explicitly denies
+`@parcel/watcher@2.6.0`, an omitted development dependency that npm 12's strict
+preflight checks in the lockfile. Its install script is never enabled.
+The policy is written only in the active
+Python environment's Browser wrapper, and strict npm policy rejects new
+unapproved scripts. CI, Docker, and the quickstarts all use this initializer.
+Rerun it after an upgrade replaces the wrapper metadata. Review the new package
+version and script before updating the approval; avoid approvals covering every
+package or future version. See [npm's policy documentation](https://docs.npmjs.com/cli/using-npm/config/#strict-allow-scripts).

@@ -32,13 +32,20 @@ UI tests additionally need **Node.js 26.11.1** (Current) and the optional Browse
 
 ```sh
 python -m pip install -r requirements-ui.txt
-npm install --global npm@12.2.0
-rfbrowser init chromium
+npm install --global --prefix .venv/npm npm@12.2.0
+export PATH="$PWD/.venv/npm/bin:$PATH"
+python scripts/init_browser.py
 python -m robot --pythonpath . --outputdir output/ui tests/ui
 ```
 
-On supported Linux distributions, use `rfbrowser init --with-deps chromium` to
-install the matching OS libraries as well. The [Linux guide](docs/quickstart-linux.md)
+These shell commands use a writable npm prefix inside the venv. The
+[Windows guide](docs/quickstart-windows.md#optional-ui-setup) has PowerShell commands.
+The initializer approves only the reviewed `protobufjs@7.6.6` postinstall in
+Browser's wrapper and makes unapproved dependency scripts fail setup under npm 12.
+It preserves Browser's existing approvals and downloads matching Chromium.
+
+On supported Linux distributions, add `--with-deps` to the initializer to install
+the matching OS libraries. The [Linux guide](docs/quickstart-linux.md)
 explains the supported path and Docker alternative.
 
 After UI setup, run all 25 local examples with:
@@ -75,7 +82,7 @@ fixtures/       Small local HTTP/SQLite application and HTML page
 libraries/      Actual Python extension keywords
 resources/      Fixture lifecycle, domain keywords, and page interactions
 tests/          features/, api/, database/, and ui/ suites
-scripts/        Documentation and secret-artifact checks
+scripts/        Browser initialization, documentation, and secret-artifact checks
 docs/           Platform quickstarts and project guidance
 ```
 

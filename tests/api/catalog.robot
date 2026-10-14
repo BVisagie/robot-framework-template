@@ -67,11 +67,17 @@ Invalid input is rejected without changing the catalog
     ${response}    GET On Session    catalog    /api/items    expected_status=200    timeout=5
     Should Be Equal    ${response.json()}    ${CATALOG_SEED}
 
-Malformed JSON receives a bounded error response
-    [Documentation]    Verify decoding errors are returned as HTTP 400.
-    ${response}    POST On Session
-    ...    catalog    /api/items    data={invalid-json    expected_status=400    timeout=5
-    Should Contain    ${response.json()}[error]    non-empty name
+Malformed JSON and invalid UTF-8 receive a bounded error response
+    [Documentation]    Both decoding failures return HTTP 400 and leave the seed data intact.
+    ${invalid_utf8}    Evaluate    bytes.fromhex('ff')
+    VAR    @{payloads}    {invalid-json    ${invalid_utf8}
+    FOR    ${payload}    IN    @{payloads}
+        ${response}    POST On Session
+        ...    catalog    /api/items    data=${payload}    expected_status=400    timeout=5
+        Should Contain    ${response.json()}[error]    non-empty name
+    END
+    ${response}    GET On Session    catalog    /api/items    expected_status=200    timeout=5
+    Should Be Equal    ${response.json()}    ${CATALOG_SEED}
 
 Quotes in names remain literal data
     [Documentation]    The fixture binds SQL values so quotes do not modify a query.

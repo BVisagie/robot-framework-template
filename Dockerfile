@@ -24,11 +24,12 @@ CMD ["tests/features", "tests/api", "tests/database"]
 FROM base AS ui
 COPY --from=node:26.11.1-trixie-slim /usr/local/ /usr/local/
 COPY requirements-ui.txt ./
+COPY scripts/init_browser.py ./scripts/init_browser.py
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libatomic1 \
     && npm install --global npm@12.2.0 \
     && python -m pip install --no-cache-dir -r requirements-ui.txt \
-    && rfbrowser init --with-deps chromium \
+    && python scripts/init_browser.py --with-deps \
     && rm -rf /var/lib/apt/lists/*
 CMD ["tests"]
 

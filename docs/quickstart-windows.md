@@ -45,13 +45,27 @@ PowerShell session if needed, reactivate `.venv`, and verify `node --version`.
 
 ```powershell
 python -m pip install -r requirements-ui.txt
-npm install --global npm@12.2.0
-rfbrowser init chromium
+npm install --global --prefix .venv\npm npm@12.2.0
+$env:PATH = "$PWD\.venv\npm;$env:PATH"
+npm --version
+python scripts/init_browser.py
 python -m robot --pythonpath . --outputdir output/ui tests/ui
 ```
 
-Expect four passing UI tests. If `rfbrowser` is not on PATH, use
-`python -m Browser.entry init chromium`.
+The npm prefix is inside your writable `.venv`, so npm upgrades do not require
+administrator access. Add it to PATH in each new PowerShell session after
+activating the venv.
+
+[The initializer](../scripts/init_browser.py) adds the exact `protobufjs@7.6.6`
+postinstall approval to Browser's wrapper `package.json`, preserving Browser's
+existing approvals. That script checks dependency version prefixes. npm 12 blocks
+unapproved scripts by default; `strict-allow-scripts` makes an unexpected script
+fail setup. Review new dependencies before updating the allowlist. See
+[npm's policy](https://docs.npmjs.com/cli/using-npm/config/#strict-allow-scripts) and
+[Browser's guidance](https://robotframework-browser.org/docs/start/installation/).
+
+Expect four passing UI tests. The initializer uses the active Python interpreter;
+the `rfbrowser` executable does not need to be on PATH.
 
 Run all 25 local tests after UI setup:
 
@@ -92,8 +106,10 @@ A Robot CLI variable takes precedence over the environment. See
 
 - Import errors: use the repository root and `--pythonpath .`.
 - Missing packages: verify `python --version` and that the venv is active.
-- Browser launch errors: verify Node 26.11.1 and repeat `rfbrowser init chromium` after
+- Browser launch errors: verify Node 26.11.1 and repeat `python scripts/init_browser.py` after
   upgrading Browser.
+- An unapproved npm script: inspect the failed dependency before adding its exact
+  version to the initializer's approvals.
 - Fixture errors: inspect `stderr.log` in the selected output directory.
 
 The [Docker guide](quickstart-docker.md) provides an alternative using Linux containers.

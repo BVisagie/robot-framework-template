@@ -36,10 +36,30 @@ Start catalog fixture
     ...    stderr=${log_directory}${/}stderr.log
     VAR    ${FIXTURE_PROCESS}    ${process}    scope=SUITE
     TRY
-        Wait Until Keyword Succeeds    ${startup_timeout}    100 milliseconds    Catalog fixture should be ready
+        Wait for catalog fixture    ${startup_timeout}
     EXCEPT    AS    ${error}
         Fail    Catalog startup failed: ${error}. See ${log_directory}${/}stderr.log.
     END
+
+Wait for catalog fixture
+    [Documentation]    Retry readiness while the process lives; report crashes without waiting out the timeout.
+    [Arguments]    ${startup_timeout}
+    VAR    ${error}    Startup record has not been written.
+    WHILE    True    limit=${startup_timeout}    on_limit=pass
+        ${running}    Is Process Running    ${FIXTURE_PROCESS}
+        IF    not $running
+            ${result}    Wait For Process    ${FIXTURE_PROCESS}
+            Fail    Catalog process exited with code ${result.rc}
+        END
+        TRY
+            Catalog fixture should be ready
+        EXCEPT    AS    ${error}
+            Sleep    100 milliseconds
+        ELSE
+            RETURN
+        END
+    END
+    Fail    Catalog did not become ready within ${startup_timeout}: ${error}
 
 Catalog fixture should be ready
     [Documentation]    Read the atomic startup record and verify the HTTP health endpoint.

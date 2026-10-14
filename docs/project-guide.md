@@ -15,7 +15,7 @@ and Python extension keywords in separate directories with direct imports.
 | `fixtures/` | The minimal application under test and its HTML page |
 | `libraries/example_library.py` | Actual Python extension keywords, explicitly exposed with decorators |
 | `examples/external/` | Optional demonstrations that contact public services |
-| `scripts/` | Small documentation and artifact validation commands |
+| `scripts/` | Browser initialization and small documentation/artifact checks |
 | `pyproject.toml` | Robocop and Ruff configuration |
 | `.editorconfig`, `.gitattributes` | Editor-independent spacing and text line endings |
 

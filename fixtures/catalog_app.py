@@ -75,7 +75,7 @@ class CatalogHandler(BaseHTTPRequestHandler):
                 or not 0 <= item["quantity"] <= 2**63 - 1
             ):
                 raise ValueError
-        except ValueError, UnicodeDecodeError:
+        except ValueError:
             self._json(
                 400, {"error": "Provide a non-empty name and a non-negative integer quantity."}
             )

@@ -18,7 +18,10 @@ docker build --target ui -t rf-template:ui .
 A build without `--target` also produces the core image. The runtime uses
 `python:3.15.0-slim-trixie`; the UI stage copies Node from `node:26.11.1-trixie-slim`.
 Both use Debian 13. The UI stage also installs Node's required `libatomic` library
-and npm 12.2.0 before initializing Browser.
+and npm 12.2.0 before running [the Browser initializer](../scripts/init_browser.py).
+It preserves Browser's npm approvals, adds the reviewed `protobufjs@7.6.6`
+postinstall, and enables strict script checking. An unapproved dependency script
+fails the image build instead of being skipped with a warning.
 The runtime tags pin the tested Python and Node releases. CI builds and runs
 both targets. The build context excludes environments, editor files,
 Git metadata, and generated artifacts through `.dockerignore`.
@@ -73,6 +76,8 @@ volume or adjust the ownership of your result directory if your local workflow n
   `rf-template:ui`.
 - Browser launch problems after dependency changes: rebuild the UI target, which
   initializes the browser using Browser's own Playwright version.
+- Unapproved npm scripts stop the UI build. Review the dependency's script before
+  updating the initializer's exact version approval.
 - Check the mounted `fixtures/` stderr logs for fixture startup failures.
 - Docker uses the selected image's copied source. Rebuild after editing tests;
   no full-workspace bind mount is needed to preserve reports.
