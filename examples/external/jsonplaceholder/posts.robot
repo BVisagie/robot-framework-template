@@ -3,7 +3,7 @@ Documentation     Optional public-service demonstration; not part of default dis
 
 Library           RequestsLibrary
 
-Suite Setup       Create Session    jsonplaceholder    ${JSONPLACEHOLDER_BASE_URL}
+Suite Setup       Create Session    jsonplaceholder    ${JSONPLACEHOLDER_BASE_URL}    verify=${True}
 Suite Teardown    Delete All Sessions
 
 Test Tags         external    api
