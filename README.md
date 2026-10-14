@@ -9,10 +9,11 @@ GitHub template, or clone it to explore the examples.
 
 ## Start with the Python-only examples
 
-The tested Python version is **3.14**. From the repository root on Linux:
+The tested Python release is **3.15.0**, the latest stable release at the dependency
+refresh on 14 October 2026. From the repository root on Linux:
 
 ```sh
-python3.14 -m venv .venv
+python3.15 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 python -m robot --pythonpath . --outputdir output/core tests/features tests/api tests/database
@@ -27,7 +28,7 @@ or [Docker](docs/quickstart-docker.md) guide for platform setup.
 
 ## Add browser testing
 
-UI tests additionally need **Node.js 24** and the optional Browser dependencies:
+UI tests additionally need **Node.js 26.11.1** (Current) and the optional Browser dependencies:
 
 ```sh
 python -m pip install -r requirements-ui.txt

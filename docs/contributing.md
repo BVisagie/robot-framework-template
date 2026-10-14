@@ -1,6 +1,6 @@
 # Contributing
 
-Use Python 3.14 and an active `.venv`. Install developer tools from the repository
+Use Python 3.15 and an active `.venv`. Install developer tools from the repository
 root; core dependencies are included automatically:
 
 ```sh
@@ -8,7 +8,7 @@ python -m pip install -r requirements-dev.txt
 pre-commit install
 ```
 
-Add UI dependencies and Node 24 only when working on Browser examples.
+Add UI dependencies and Node 26.11.1 only when working on Browser examples.
 
 ## Read-only checks
 
@@ -100,6 +100,27 @@ Generated docs are CI artifacts and are not committed to the template.
 
 ## CI and dependency changes
 
+The dependency baseline was checked against PyPI and official runtime/action
+releases on 14 October 2026. Python 3.15.0 and Node 26.11.1 (Current) are the latest
+stable runtime releases. Direct Python pins and exact GitHub Action tags use the
+latest stable releases:
+
+| Dependency | Version |
+| --- | --- |
+| Robot Framework | 7.5 |
+| RequestsLibrary / DatabaseLibrary | 0.9.7 / 2.5.0 |
+| Browser / PyYAML | 20.6.0 / 6.0.3 |
+| Robocop / Ruff | 9.1.0 / 0.17.0 |
+| pre-commit / Markdown | 4.7.0 / 3.11.1 |
+| actions/checkout | v7.0.1 |
+| actions/setup-python | v7.0.0 |
+| actions/setup-node | v7.1.0 |
+| actions/upload-artifact | v7.0.2 |
+
+Transitive dependencies must satisfy upstream constraints. Browser 20.6.0
+requires protobuf 7.35.1 even though a newer protobuf release
+exists; keep that required version and verify resolution with `python -m pip check`.
+
 The workflow checks lint/formatting, local documentation links, and Libdoc;
 executes the core suite on Ubuntu 24.04 and Windows Server 2025; executes the UI
 and journey on Ubuntu; and builds/runs the core and UI Docker targets.
@@ -117,6 +138,6 @@ dependencies are resolved by pip. When updating a dependency:
    `rfbrowser init --with-deps chromium` when OS dependencies need installation.
 5. Build and run both Docker targets for runtime changes.
 
-Keep Python 3.14 and Node 24 as the documented/tested lines until the complete
-dependency set and CI cover another line. Robot Framework's support for another
-Python version alone does not establish support for this project's other tools.
+Update runtime pins in Docker and CI together with the documented setup versions.
+Validate the complete dependency set on Ubuntu, Windows, and both Docker targets
+before claiming support for a newer runtime.

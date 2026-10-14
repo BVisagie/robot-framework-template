@@ -7,8 +7,8 @@ with Linux container support, then run commands from the repository root.
 
 | Target | Runtime | Default run |
 | --- | --- | --- |
-| `core` | Python 3.14 and core dependencies | 21 feature/API/SQLite tests |
-| `ui` | Core plus Node 24, Browser, and Chromium with matching OS libraries | All 25 local tests |
+| `core` | Python 3.15 and core dependencies | 21 feature/API/SQLite tests |
+| `ui` | Core plus Node 26.11.1, Browser, and Chromium with matching OS libraries | All 25 local tests |
 
 ```sh
 docker build --target core -t rf-template:core .
@@ -16,9 +16,9 @@ docker build --target ui -t rf-template:ui .
 ```
 
 A build without `--target` also produces the core image. The runtime uses
-`python:3.14-slim-bookworm`; the UI stage copies Node from `node:24-bookworm-slim`.
-These tags follow patch updates within the documented version lines. CI builds
-and runs both targets. The build context excludes environments, editor files,
+`python:3.15.0-slim-bookworm`; the UI stage copies Node from `node:26.11.1-bookworm-slim`.
+The runtime tags pin the tested Python and Node releases. CI builds and runs
+both targets. The build context excludes environments, editor files,
 Git metadata, and generated artifacts through `.dockerignore`.
 
 ## Run

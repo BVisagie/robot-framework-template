@@ -5,11 +5,11 @@ root. The core examples need no Node installation or browser download.
 
 ## Prerequisites
 
-- Git and Python **3.14**, with the Python launcher, pip, and venv support.
-- Node.js **24** only for optional UI tests.
+- Git and Python **3.15**, with the Python launcher, pip, and venv support.
+- Node.js **26.11.1** only for optional UI tests.
 
-Install Python using the [official Windows guidance](https://docs.python.org/3.14/using/windows.html)
-and verify `py -3.14 --version`. Install Git from [Git for Windows](https://git-scm.com/downloads/win).
+Install Python using the [official Windows guidance](https://docs.python.org/3.15/using/windows.html)
+and verify `py -3.15 --version`. Install Git from [Git for Windows](https://git-scm.com/downloads/win).
 The CI core job uses Windows Server 2025; local desktop Windows must also meet
 the installed browser's requirements if you run UI tests.
 
@@ -18,7 +18,7 @@ the installed browser's requirements if you run UI tests.
 ```powershell
 git clone https://github.com/BVisagie/robot-framework-template.git
 cd robot-framework-template
-py -3.14 -m venv .venv
+py -3.15 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python --version
 python -m pip install -r requirements.txt
@@ -40,7 +40,7 @@ SQLite files, and clean up automatically. Open `output/core/report.html` or
 
 ## Optional UI setup
 
-Install Node.js 24 from [Node.js](https://nodejs.org/en/download). Open a new
+Install Node.js 26.11.1 from [Node.js](https://nodejs.org/en/download/current). Open a new
 PowerShell session if needed, reactivate `.venv`, and verify `node --version`.
 
 ```powershell
@@ -91,7 +91,7 @@ A Robot CLI variable takes precedence over the environment. See
 
 - Import errors: use the repository root and `--pythonpath .`.
 - Missing packages: verify `python --version` and that the venv is active.
-- Browser launch errors: verify Node 24 and repeat `rfbrowser init chromium` after
+- Browser launch errors: verify Node 26.11.1 and repeat `rfbrowser init chromium` after
   upgrading Browser.
 - Fixture errors: inspect `stderr.log` in the selected output directory.
 

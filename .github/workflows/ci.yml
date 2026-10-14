@@ -24,10 +24,10 @@ jobs:
     name: Lint and documentation
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
         with:
-          python-version: "3.14"
+          python-version: "3.15.0"
           cache: pip
           cache-dependency-path: |
             requirements.txt
@@ -45,7 +45,7 @@ jobs:
         run: |
           python -m robot.libdoc libraries/example_library.py output/libdoc/example_library.html
           python -m robot.libdoc libraries/example_library.py output/libdoc/example_library.md
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: example-library-docs
           path: output/libdoc/
@@ -60,10 +60,10 @@ jobs:
       matrix:
         os: [ubuntu-24.04, windows-2025]
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
         with:
-          python-version: "3.14"
+          python-version: "3.15.0"
           cache: pip
           cache-dependency-path: requirements.txt
       - name: Install Python-only runtime
@@ -74,7 +74,7 @@ jobs:
         run: python -m robot.rebot --console dotted --output output/core/results.json --log NONE --report NONE output/core/output.xml
       - name: Check secret masking through success and failure paths
         run: python scripts/check_secret_artifacts.py output/core
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: robot-core-${{ matrix.os }}
@@ -86,24 +86,24 @@ jobs:
     runs-on: ubuntu-24.04
     needs: lint
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
         with:
-          python-version: "3.14"
+          python-version: "3.15.0"
           cache: pip
           cache-dependency-path: |
             requirements.txt
             requirements-ui.txt
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: "24"
+          node-version: "26.11.1"
       - name: Install Browser and its matching Chromium dependencies
         run: |
           python -m pip install -r requirements-ui.txt
           rfbrowser init --with-deps chromium
       - name: Run local browser and API to UI to SQLite journey
         run: python -m robot --pythonpath . --outputdir output/ui tests/ui
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: robot-ui-results
@@ -115,7 +115,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs: lint
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
       - name: Build and run Python-only image
         run: |
           docker build --target core -t rf-template:core .
@@ -124,7 +124,7 @@ jobs:
         run: |
           docker build --target ui -t rf-template:ui .
           docker run --rm -v "${PWD}/output/docker-ui:/workspace/output" rf-template:ui
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: robot-docker-results
@@ -136,16 +136,16 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.external_demo != 'none'
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
         with:
-          python-version: "3.14"
+          python-version: "3.15.0"
       - name: Install core runtime
         run: python -m pip install -r requirements.txt
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7.1.0
         if: inputs.external_demo == 'wikipedia'
         with:
-          node-version: "24"
+          node-version: "26.11.1"
       - name: Install optional UI runtime
         if: inputs.external_demo == 'wikipedia'
         run: |
@@ -155,7 +155,7 @@ jobs:
         env:
           DEMO: ${{ inputs.external_demo }}
         run: python -m robot --pythonpath . --outputdir output/external "examples/external/$DEMO"
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: robot-external-results

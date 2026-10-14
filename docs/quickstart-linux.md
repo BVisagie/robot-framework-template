@@ -5,12 +5,12 @@ Run project commands from the repository root.
 
 ## Prerequisites
 
-- Git and Python **3.14**, including the `venv` module and pip.
-- Node.js **24** only if you want UI tests.
+- Git and Python **3.15**, including the `venv` module and pip.
+- Node.js **26.11.1** only if you want UI tests.
 
 Install Python using your distribution's supported packages or the
-[official Python installation guidance](https://docs.python.org/3.14/using/unix.html).
-Check that `python3.14 --version` works. On Debian/Ubuntu, install the corresponding
+[official Python installation guidance](https://docs.python.org/3.15/using/unix.html).
+Check that `python3.15 --version` works. On Debian/Ubuntu, install the corresponding
 venv package if your Python installation does not include it. Package availability
 depends on the distribution release; this template does not require adding a PPA.
 
@@ -19,7 +19,7 @@ depends on the distribution release; this template does not require adding a PPA
 ```sh
 git clone https://github.com/BVisagie/robot-framework-template.git
 cd robot-framework-template
-python3.14 -m venv .venv
+python3.15 -m venv .venv
 source .venv/bin/activate
 python --version
 python -m pip install -r requirements.txt
@@ -42,7 +42,7 @@ Fixture stdout/stderr are retained under `output/core/fixtures/` for diagnosis.
 
 ## Optional UI setup
 
-Install Node.js 24 from [Node.js](https://nodejs.org/en/download) or an existing
+Install Node.js 26.11.1 from [Node.js](https://nodejs.org/en/download/current) or an existing
 runtime manager, and verify `node --version` and `npm --version`.
 
 On a [Playwright-supported Linux distribution](https://playwright.dev/docs/intro#system-requirements):
@@ -94,7 +94,7 @@ See [contributing](contributing.md) for full checks and formatting commands.
 - A missing `robot` executable usually means the venv is inactive. Activate it and
   use `python -m robot` so the interpreter and dependencies stay together.
 - Import errors: run from the repository root and include `--pythonpath .`.
-- Browser launch errors: verify Node 24, run `rfbrowser init chromium` again after
+- Browser launch errors: verify Node 26.11.1, run `rfbrowser init chromium` again after
   a Browser upgrade, and check supported OS dependencies or use Docker.
 - Fixture startup errors: inspect the suite's `stderr.log` under the selected
   output directory. A startup failure has a bounded timeout and still runs cleanup.
