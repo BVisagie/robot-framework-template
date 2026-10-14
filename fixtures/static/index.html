@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Local catalog</title>
+  <style>
+    body { font: 1rem/1.5 system-ui, sans-serif; max-width: 48rem; margin: 3rem auto; padding: 0 1rem; color: #172b4d; }
+    h1, h2 { line-height: 1.2; }
+    label { display: block; margin-top: .75rem; }
+    input, button { font: inherit; padding: .5rem; }
+    button { margin-top: 1rem; cursor: pointer; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+    th, td { border-bottom: 1px solid #ccd; padding: .6rem; text-align: left; }
+    #status { min-height: 1.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Local catalog</h1>
+  <label for="search">Filter items</label>
+  <input id="search" type="search">
+  <table aria-label="Catalog items">
+    <thead><tr><th scope="col">Item</th><th scope="col">Quantity</th></tr></thead>
+    <tbody id="items"></tbody>
+  </table>
+  <h2>Add an item</h2>
+  <form id="add-item">
+    <label for="name">Name</label>
+    <input id="name" required>
+    <label for="quantity">Quantity</label>
+    <input id="quantity" type="number" min="0" step="1" required value="1">
+    <br><button type="submit">Add item</button>
+  </form>
+  <p id="status" role="status" aria-live="polite"></p>
+  <script>
+    const search = document.querySelector('#search');
+    const items = document.querySelector('#items');
+    const status = document.querySelector('#status');
+    let currentRequest = 0;
+    async function refresh() {
+      const request = ++currentRequest;
+      const response = await fetch('/api/items?q=' + encodeURIComponent(search.value));
+      if (!response.ok) throw new Error('Could not load items.');
+      const records = await response.json();
+      if (request !== currentRequest) return;
+      items.replaceChildren();
+      for (const record of records) {
+        const row = document.createElement('tr');
+        row.dataset.itemId = record.id;
+        for (const value of [record.name, record.quantity]) {
+          const cell = document.createElement('td');
+          cell.textContent = value;
+          row.append(cell);
+        }
+        items.append(row);
+      }
+    }
+    search.addEventListener('input', () => refresh().catch(error => status.textContent = error.message));
+    document.querySelector('#add-item').addEventListener('submit', async event => {
+      event.preventDefault();
+      status.textContent = '';
+      try {
+        const response = await fetch('/api/items', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            name: document.querySelector('#name').value,
+            quantity: Number(document.querySelector('#quantity').value)
+          })
+        });
+        const record = await response.json();
+        if (!response.ok) throw new Error(record.error);
+        await refresh();
+        status.textContent = 'Added ' + record.name;
+        event.target.reset();
+      } catch (error) {
+        status.textContent = error.message;
+      }
+    });
+    refresh().catch(error => status.textContent = error.message);
+  </script>
+</body>
+</html>

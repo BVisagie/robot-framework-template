@@ -1,24 +1,23 @@
 [tool.robocop.lint]
-reports = [
-    "all",
-]
-# This template intentionally uses sentence-case keyword names for readability.
-# Robocop's default Title Case / no-underscore naming rules are disabled for that reason.
-ignore = [
-    "NAME02",
-    "NAME04",
-    "NAME18",
-]
+reports = ["all"]
+# Sentence-case keywords and snake_case variable names are intentional.
+ignore = ["NAME02", "NAME04", "NAME18"]
+configure = ["inconsistent-assignment.assignment_sign_type=none"]
+
+[tool.robocop.lint.per_file_ignores]
+# The fixture owns suite-scoped handles shared by setup, tests, and teardown.
+"resources/common/fixture.resource" = ["VAR05"]
 
 [tool.robocop.format]
 line_length = 120
 
 [tool.ruff]
 line-length = 100
+target-version = "py315"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 ignore = []
 
 [tool.ruff.format]
-quote-style = "preserve"
+quote-style = "double"

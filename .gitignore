@@ -1,37 +1,23 @@
-# IDEs
-.idea
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
-
-# Reports and logs
-playwright-log.txt
-report.html
-log.html
-log/
-output/
-output.xml
-*.old
-reports/
-testresults/
-pip-log.txt
-pip-delete-this-directory.txt
-coverage.xml
-
-# Environments
-*venv*/
-.env
-.venv
-env/
+# Local environments and editor settings
+.venv/
 venv/
-ENV/
-env.bak/
-venv.bak/
+.env
+.idea/
+.vscode/
 
-*.iml
+# Generated execution artifacts and library documentation
+output/
+reports/
+output.xml
+output.json
+log.html
+report.html
+playwright-log.txt
+
+# Python and tool caches
 __pycache__/
-.bash_history
+*.py[cod]
 .cache/
+.ruff_cache/
+.robocop_cache/
 .pytest_cache/
-.run
-browser/

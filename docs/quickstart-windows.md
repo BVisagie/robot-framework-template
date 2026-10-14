@@ -1,143 +1,116 @@
-# Quickstart (Windows)
+# Quickstart on Windows
 
-This guide takes you from a fresh clone to running the sample tests locally.
+Use PowerShell for the commands below and run project commands from the repository
+root. The core examples need no Node installation or browser download.
 
 ## Prerequisites
 
-- Python 3.14+ (latest bugfix release line)
-- Node.js 24+ (Active LTS)
-- Git
+- Git and Python **3.15**, with the Python launcher, pip, and venv support.
+- Node.js **26.11.1** only for optional UI tests.
 
-### Where to run commands
+Install Python using the [official Windows guidance](https://docs.python.org/3.15/using/windows.html)
+and verify `py -3.15 --version`. Install Git from [Git for Windows](https://git-scm.com/downloads/win).
+The CI core job uses Windows Server 2025; local desktop Windows must also meet
+the installed browser's requirements if you run UI tests.
 
-- System-level installs (e.g., Python installer, Node installer) can be run from any directory.
-- Project-specific steps (e.g., `git clone`, `cd robot-framework-template`, creating/activating `.venv`, `pip install -r requirements.txt`, `rfbrowser init`, `robot ...`) should be run from the project root directory unless noted otherwise.
-
-## Installing Python 3.14+
-
-Install the latest Python 3.14 for Windows from the official downloads. python.org currently recommends the
-[Python install manager](https://www.python.org/downloads/windows/) for Windows; the traditional installer remains
-available through the 3.14/3.15 release lines.
-
-- Official downloads: https://www.python.org/downloads/windows/
-- Status of Python versions: https://devguide.python.org/versions/
-
-Verify installation:
+## Clone and create an environment
 
 ```powershell
-py -3.14 --version
-python --version
-```
-
-## Installing Node.js 24+
-
-Download and install the Active LTS (24.x / Krypton) from Node.js for Windows:
-
-- Node.js downloads: https://nodejs.org/en/download
-- Release status: https://nodejs.org/en/about/previous-releases
-
-Verify installation:
-
-```powershell
-node -v
-npm -v
-```
-
-## 1) Clone and enter the project
-
-```powershell
-git clone https://github.com/BVisagie/robot-framework-template
+git clone https://github.com/BVisagie/robot-framework-template.git
 cd robot-framework-template
-```
-
-## 2) Create and activate a virtual environment (PowerShell)
-
-```powershell
-py -3.14 -m venv .venv
+py -3.15 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python --version  # should be 3.14+
+python --version
+python -m pip install -r requirements.txt
 ```
 
-Upgrade pip:
+If you used GitHub's template button, clone your new repository instead.
+If your PowerShell policy prevents activation, use `.\.venv\Scripts\python.exe`
+in place of `python`; use full paths for other venv tools as well.
+
+## Run the core examples
 
 ```powershell
-python -m pip install --upgrade pip
+python -m robot --pythonpath . --outputdir output/core tests/features tests/api tests/database
 ```
 
-## 3) Install Python dependencies
+Expect 21 passing tests. HTTP fixtures use available loopback ports and temporary
+SQLite files, and clean up automatically. Open `output/core/report.html` or
+`output/core/log.html`. Fixture logs are under `output/core/fixtures/`.
+
+## Optional UI setup
+
+Install Node.js 26.11.1 from [Node.js](https://nodejs.org/en/download/current). Open a new
+PowerShell session if needed, reactivate `.venv`, and verify `node --version`.
 
 ```powershell
-pip install -r requirements.txt
-# Optional dev tools
-pip install -r requirements-dev.txt
+python -m pip install -r requirements-ui.txt
+npm install --global --prefix .venv\npm npm@12.2.0
+$env:PATH = "$PWD\.venv\npm;$env:PATH"
+npm --version
+python scripts/init_browser.py
+python -m robot --pythonpath . --outputdir output/ui tests/ui
 ```
 
-## 4) Initialize Robot Framework Browser
+The npm prefix is inside your writable `.venv`, so npm upgrades do not require
+administrator access. Add it to PATH in each new PowerShell session after
+activating the venv.
 
-On Windows, Playwright system dependencies are handled differently. Initialize the Browser library:
+[The initializer](../scripts/init_browser.py) adds the exact `protobufjs@7.6.6`
+postinstall approval to Browser's wrapper `package.json`, preserving Browser's
+existing approvals. That script checks dependency version prefixes. npm 12 blocks
+unapproved scripts by default; `strict-allow-scripts` makes an unexpected script
+fail setup. Review new dependencies before updating the allowlist. See
+[npm's policy](https://docs.npmjs.com/cli/using-npm/config/#strict-allow-scripts) and
+[Browser's guidance](https://robotframework-browser.org/docs/start/installation/).
+
+Expect four passing UI tests. The initializer uses the active Python interpreter;
+the `rfbrowser` executable does not need to be on PATH.
+
+Run all 25 local tests after UI setup:
 
 ```powershell
-rfbrowser init
+python -m robot --pythonpath . --outputdir output/all tests
 ```
 
-## 5) (Optional) Pre-commit hooks
+For a visible browser:
 
 ```powershell
+python -m robot --pythonpath . --outputdir output/ui --variable HEADLESS_BROWSER:false tests/ui
+```
+
+## Optional developer tools
+
+```powershell
+python -m pip install -r requirements-dev.txt
 pre-commit install
-```
-
-Notes:
-
-- Ensure your virtual environment is active (`.\.venv\Scripts\Activate.ps1` if you used `.venv`).
-- Install dev tools first: `pip install -r requirements-dev.txt`.
-- If you see "pre-commit: command not found", try: `python -m pre_commit install`.
-- Verify: `pre-commit --version`.
-
-Run lint/format checks:
-
-```powershell
 robocop check .
-robocop format .
+robocop format --check .
+ruff check .
+ruff format --check .
+python scripts/check_docs.py
 ```
 
-## 6) Run the tests
+See [contributing](contributing.md) for artifact verification and Libdoc commands.
 
-Headless mode is the default. Always pass `--pythonpath .` from the project root so root-relative
-`Resource` / `Library` / `Variables` imports resolve (see the official
-[project structure guide](https://docs.robotframework.org/docs/examples/project_structure)).
+## Configuration and troubleshooting
 
-- API tests:
-
-```powershell
-robot --pythonpath . --outputdir output tests/project_json_placeholder/api_tests
-```
-
-- UI tests (Wikipedia demo):
-
-```powershell
-robot --pythonpath . --outputdir output tests/project_wikipedia/ui_tests
-```
-
-- All runnable samples (excludes placeholder DB examples):
-
-```powershell
-robot --pythonpath . --outputdir output --exclude do_not_run tests
-```
-
-## 7) Useful environment variables
-
-- HEADLESS_BROWSER=true|false (default true)
-- WIKIPEDIA_BASE_URL to override the default https://www.wikipedia.org/
-- Database (examples only): DB_HOST, DB_PORT, DB_SERVICE_NAME, DB_USER, DB_PASSWORD, DB_API_MODULE
-
-Example (PowerShell):
+Set an environment override with PowerShell syntax:
 
 ```powershell
 $env:HEADLESS_BROWSER = "true"
-$env:WIKIPEDIA_BASE_URL = "https://www.wikipedia.org/"
 ```
 
-## 8) Troubleshooting
+A Robot CLI variable takes precedence over the environment. See
+[configuration](project-guide.md#configuration) for accepted values and defaults.
 
-- If browsers fail to launch, re-run `rfbrowser init` after ensuring Node 24+ is installed.
-- For DB placeholders, tests are tagged `do_not_run` by default and are documentation-only.
+- Import errors: use the repository root and `--pythonpath .`.
+- Missing packages: verify `python --version` and that the venv is active.
+- Browser launch errors: verify Node 26.11.1 and repeat `python scripts/init_browser.py` after
+  upgrading Browser.
+- An unapproved npm script: inspect the failed dependency before adding its exact
+  version to the initializer's approvals.
+- Fixture errors: inspect `stderr.log` in the selected output directory.
+
+The [Docker guide](quickstart-docker.md) provides an alternative using Linux containers.
+Public-service examples are [explicitly selected demos](examples.md#optional-public-service-demos).
