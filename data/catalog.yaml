@@ -1,0 +1,26 @@
+# One seed dataset used by the local application and Robot assertions.
+CATALOG_SEED:
+  - id: 1
+    name: Robot Framework guide
+    quantity: 5
+  - id: 2
+    name: SQLite handbook
+    quantity: 3
+  - id: 3
+    name: Browser testing notes
+    quantity: 2
+SEARCH_CASES:
+  - query: Robot
+    expected_name: Robot Framework guide
+  - query: SQLite
+    expected_name: SQLite handbook
+INVALID_ITEMS:
+  - name: Invalid
+    quantity: -1
+  - name: Invalid
+    quantity: true
+  - name: Too large for SQLite
+    quantity: 18446744073709551616
+  - name: Missing quantity
+  - name: "  "
+    quantity: 1

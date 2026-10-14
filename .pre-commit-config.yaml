@@ -1,14 +1,17 @@
 repos:
   - repo: https://github.com/MarketSquare/robotframework-robocop
-    rev: v8.6.0
+    rev: v9.1.0
     hooks:
       - id: robocop
+        additional_dependencies: [robotframework==7.5]
         args:
           - --reports
           - all
       - id: robocop-format
+        additional_dependencies: [robotframework==7.5]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.2
+    rev: v0.17.0
     hooks:
-      - id: ruff
+      - id: ruff-check
         args: ["--fix"]
+      - id: ruff-format

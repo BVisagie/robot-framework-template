@@ -1,3 +1,5 @@
-pre-commit>=4.6.1
-robotframework-robocop>=8.6.0
-ruff>=0.16.2
+-r requirements.txt
+pre-commit==4.7.0
+robotframework-robocop==9.1.0
+ruff==0.17.0
+Markdown==3.11.1

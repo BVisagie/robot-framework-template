@@ -1,263 +1,103 @@
-# Quickstart (Linux)
+# Quickstart on Linux
 
-This guide takes you from a fresh clone to running the sample tests locally.
-
-Examples below cover both **Ubuntu/Debian (`apt`)** and **Fedora (`dnf`)**. Use the section that matches your distribution.
-
-Important for UI tests: Playwright only officially supports Debian/Ubuntu on Linux
-([system requirements](https://playwright.dev/docs/intro#system-requirements)).
-`npx playwright install-deps` uses `apt-get` and **will fail on Fedora**. Fedora is fully fine for
-API tests and general Robot Framework work; for local UI runs on Fedora use the
-[Docker quickstart](quickstart-docker.md) (recommended) or the best-effort Fedora notes in section 4.
+Start with the Python-only examples. Browser setup is an additional step.
+Run project commands from the repository root.
 
 ## Prerequisites
 
-- Python 3.14+ (latest bugfix release line)
-- Node.js 24+ (Active LTS)
-- Git
+- Git and Python **3.14**, including the `venv` module and pip.
+- Node.js **24** only if you want UI tests.
 
-### Where to run commands
+Install Python using your distribution's supported packages or the
+[official Python installation guidance](https://docs.python.org/3.14/using/unix.html).
+Check that `python3.14 --version` works. On Debian/Ubuntu, install the corresponding
+venv package if your Python installation does not include it. Package availability
+depends on the distribution release; this template does not require adding a PPA.
 
-- System-level installs (package manager, Node setup, Playwright OS deps on Ubuntu/Debian) can be run from any directory.
-- Project-specific steps (e.g., `git clone`, `cd robot-framework-template`, creating/activating `venv`, `pip install -r requirements.txt`, `rfbrowser init`, `robot ...`) should be run from the project root directory unless noted otherwise.
-
-## Installing Python 3.14+
-
-If Python 3.14 is not installed, either install from the official downloads or use your distro's packages.
-
-- Official downloads: https://www.python.org/downloads/
-- Status of Python versions: https://devguide.python.org/versions/
-
-### Ubuntu / Debian (`apt`)
+## Clone and create an environment
 
 ```sh
-sudo apt-get update
-sudo apt-get install -y software-properties-common
-sudo add-apt-repository ppa:deadsnakes/ppa -y
-sudo apt-get update
-sudo apt-get install -y python3.14 python3.14-venv
-python3.14 --version
-```
-
-### Fedora (`dnf`)
-
-```sh
-sudo dnf install -y python3.14
-python3.14 --version
-```
-
-If your Fedora release does not yet ship `python3.14` in the default repos, install the newest available 3.x line from Fedora (or use the official python.org installer) and ensure it is 3.14+:
-
-```sh
-sudo dnf install -y python3
-python3 --version
-```
-
-## Installing Node.js 24+
-
-Install the Active LTS (24.x / Krypton) and verify with `node -v` / `npm -v`.
-
-### Ubuntu / Debian (`apt` + NodeSource)
-
-```sh
-curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
-sudo apt-get install -y nodejs
-node -v
-npm -v
-```
-
-If `apt-get update` fails due to a third‑party PPA
-
-Some systems have extra PPAs that break `apt-get update` during the NodeSource setup. If you see errors like "does not have a Release file", disable the offending PPA and retry:
-
-```sh
-# example: remove deadsnakes PPA if it is invalid for your Ubuntu codename
-sudo add-apt-repository -r ppa:deadsnakes/ppa || true
-sudo rm -f /etc/apt/sources.list.d/deadsnakes-ubuntu-ppa*.list
-sudo apt-get update
-
-# rerun NodeSource setup and install Node.js 24 Active LTS
-curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
-sudo apt-get install -y nodejs
-node -v && npm -v
-```
-
-### Fedora (`dnf` + NodeSource)
-
-```sh
-curl -fsSL https://rpm.nodesource.com/setup_24.x | sudo bash -
-sudo dnf install -y nodejs
-node -v
-npm -v
-```
-
-### Alternative on any distro: nvm (user‑space)
-
-If you prefer to avoid system packages, use nvm and install Node 24 Active LTS into your user profile:
-
-```sh
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.6/install.sh | bash
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-nvm install 24
-nvm use 24
-node -v && npm -v
-```
-
-## 1) Clone and enter the project
-
-Install Git first if needed:
-
-```sh
-# Ubuntu / Debian
-sudo apt-get install -y git
-
-# Fedora
-sudo dnf install -y git
-```
-
-```sh
-git clone https://github.com/BVisagie/robot-framework-template
+git clone https://github.com/BVisagie/robot-framework-template.git
 cd robot-framework-template
+python3.14 -m venv .venv
+source .venv/bin/activate
+python --version
+python -m pip install -r requirements.txt
 ```
 
-## 2) Create and activate a virtual environment
+If you used GitHub's template button, clone your new repository instead.
+
+## Run the core examples
 
 ```sh
-python3.14 -m venv venv
-source venv/bin/activate
-python --version  # should be 3.14+
+python -m robot --pythonpath . --outputdir output/core tests/features tests/api tests/database
 ```
 
-Upgrade pip:
+Expect 21 passing tests. The fixture starts automatically on an available loopback
+port, uses a temporary SQLite database, and stops after each suite. Test execution
+does not need internet access. Dependency installation does.
+
+Open `output/core/report.html` or `output/core/log.html` in your browser.
+Fixture stdout/stderr are retained under `output/core/fixtures/` for diagnosis.
+
+## Optional UI setup
+
+Install Node.js 24 from [Node.js](https://nodejs.org/en/download) or an existing
+runtime manager, and verify `node --version` and `npm --version`.
+
+On a [Playwright-supported Linux distribution](https://playwright.dev/docs/intro#system-requirements):
 
 ```sh
-pip install --upgrade pip
+python -m pip install -r requirements-ui.txt
+rfbrowser init --with-deps chromium
+python -m robot --pythonpath . --outputdir output/ui tests/ui
 ```
 
-## 3) Install Python dependencies
+The `--with-deps` step uses the distribution package manager and may request sudo
+for OS libraries. Run the command in your active venv as your normal user; Browser
+initialization and downloaded binaries belong to that environment/user.
+If OS dependencies are already installed, use `rfbrowser init chromium`.
+
+Ubuntu 24.04 is the CI UI platform. On Fedora, Arch, or another distribution outside
+Playwright's supported matrix, use the [Docker UI target](quickstart-docker.md).
+Core tests still need only Python. Avoid running the apt-based `--with-deps` path
+on an unsupported distribution.
+
+Expect four passing UI tests. Run everything after installing Browser with:
 
 ```sh
-pip install -r requirements.txt
-# Optional dev tools
-pip install -r requirements-dev.txt
+python -m robot --pythonpath . --outputdir output/all tests
 ```
 
-## 4) Install Node.js and Playwright browser deps
-
-If Node 24+ is not yet installed, complete the steps in "Installing Node.js 24+" above.
-
-### Ubuntu / Debian (officially supported by Playwright)
-
-Install Playwright OS dependencies, then initialize Robot Framework Browser:
-
-- If Node was installed system-wide (NodeSource):
+For a visible browser on a graphical desktop:
 
 ```sh
-sudo npx playwright install-deps
+python -m robot --pythonpath . --outputdir output/ui --variable HEADLESS_BROWSER:false tests/ui
 ```
 
-If you see "sudo: npx: command not found", ensure npm/npx is available for root:
+## Optional developer tools
 
 ```sh
-sudo apt-get install -y nodejs || true
-sudo apt-get install -y npm || true
-# open a new shell or re-login, then retry
-sudo npx playwright install-deps
-```
-
-- If Node was installed via nvm (user-space), preserve PATH when using sudo:
-
-```sh
-sudo -E env "PATH=$PATH" npx playwright install-deps
-```
-
-```sh
-rfbrowser init
-```
-
-### Fedora (UI path not officially supported by Playwright)
-
-Do **not** run `npx playwright install-deps` on Fedora. Playwright detects a non-Ubuntu OS, falls back to
-`ubuntu24.04` packages, and then fails with `apt-get: command not found`.
-
-Recommended options:
-
-1. **Supported for UI:** use the [Docker quickstart](quickstart-docker.md) (Ubuntu-based image with Browser/Playwright deps).
-2. **API-only on the host:** skip this section’s OS-deps step and run the API samples in section 6.
-3. **Best-effort local Chromium UI (unsupported):** skip `install-deps`, initialize browsers only, then try the Wikipedia suite.
-   This template launches Chromium only; community reports often show Chromium working on recent Fedora without
-   `install-deps`, but this is outside Playwright’s supported matrix and may break across Fedora releases.
-
-```sh
-# Fedora best-effort local UI only — skip install-deps
-rfbrowser init
-robot --pythonpath . --outputdir output tests/project_wikipedia/ui_tests
-```
-
-If Chromium fails to start, prefer Docker rather than chasing distro-specific shared libraries.
-
-## 5) (Optional) Pre-commit hooks
-
-```sh
+python -m pip install -r requirements-dev.txt
 pre-commit install
-```
-
-Notes:
-
-- Ensure your virtual environment is active (`source venv/bin/activate`).
-- Install dev tools first: `pip install -r requirements-dev.txt`.
-- If you see "pre-commit: command not found", try: `python -m pre_commit install`.
-- Verify: `pre-commit --version`.
-
-Run lint/format checks:
-
-```sh
 robocop check .
-robocop format .
+robocop format --check .
+ruff check .
+ruff format --check .
+python scripts/check_docs.py
 ```
 
-## 6) Run the tests
+See [contributing](contributing.md) for full checks and formatting commands.
 
-Headless mode is the default. Always pass `--pythonpath .` from the project root so root-relative
-`Resource` / `Library` / `Variables` imports resolve (see the official
-[project structure guide](https://docs.robotframework.org/docs/examples/project_structure)).
+## Troubleshooting
 
-- API tests:
+- A missing `robot` executable usually means the venv is inactive. Activate it and
+  use `python -m robot` so the interpreter and dependencies stay together.
+- Import errors: run from the repository root and include `--pythonpath .`.
+- Browser launch errors: verify Node 24, run `rfbrowser init chromium` again after
+  a Browser upgrade, and check supported OS dependencies or use Docker.
+- Fixture startup errors: inspect the suite's `stderr.log` under the selected
+  output directory. A startup failure has a bounded timeout and still runs cleanup.
 
-```sh
-robot --pythonpath . --outputdir output tests/project_json_placeholder/api_tests
-```
-
-- UI tests (Wikipedia demo):
-
-```sh
-robot --pythonpath . --outputdir output tests/project_wikipedia/ui_tests
-```
-
-- All runnable samples (excludes placeholder DB examples):
-
-```sh
-robot --pythonpath . --outputdir output --exclude do_not_run tests
-```
-
-## 7) Useful environment variables
-
-- HEADLESS_BROWSER=true|false (default true)
-- WIKIPEDIA_BASE_URL to override the default https://www.wikipedia.org/
-- Database (examples only): DB_HOST, DB_PORT, DB_SERVICE_NAME, DB_USER, DB_PASSWORD, DB_API_MODULE
-
-Example:
-
-```sh
-export HEADLESS_BROWSER=true
-export WIKIPEDIA_BASE_URL=https://www.wikipedia.org/
-```
-
-## 8) Troubleshooting
-
-- Ubuntu/Debian UI: re-run `rfbrowser init` after Node 24+ and `sudo npx playwright install-deps` are installed.
-- Fedora UI: if you saw `apt-get: command not found` from `playwright install-deps`, that is expected — Playwright does not
-  officially support Fedora. Use [Docker](quickstart-docker.md) for a supported UI path, or try the best-effort
-  `rfbrowser init` flow in section 4.
-- For DB placeholders, tests are tagged `do_not_run` by default and are documentation-only.
+See [examples](examples.md) for individual suites and optional external demos, or
+[project configuration](project-guide.md#configuration) for environment overrides.
